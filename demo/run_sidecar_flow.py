@@ -17,6 +17,9 @@ def fixed_hex(byte_len: int, nibble: str) -> str:
 
 
 def main() -> None:
+    provider_default = "0x58FBf65233eFbFFE36Aa3e83DCd7a8813fC65bB9"
+    requester_default = "0x66c18AC12b1D4790939e84AA3476ADfCd8284180"
+
     parser = argparse.ArgumentParser(description="Run a dry-run sidecar settlement flow")
     parser.add_argument("--task-id", default="demo-task-1")
     parser.add_argument("--execution-unit-id", default="unit-1")
@@ -28,6 +31,16 @@ def main() -> None:
     )
     parser.add_argument("--escrow-value-wei", type=int, default=10**15)
     parser.add_argument("--challenge-window-sec", type=int, default=300)
+    parser.add_argument(
+        "--provider-address",
+        default=provider_default,
+        help="Worker/provider address used in createJob",
+    )
+    parser.add_argument(
+        "--job-requester-address",
+        default=requester_default,
+        help="Requester/client address for createJob transaction sender role",
+    )
     parser.add_argument(
         "--reuse-db",
         action="store_true",
@@ -44,6 +57,8 @@ def main() -> None:
     chain = ArbitrumEscrowClient(
         contract_address=args.contract_address,
         dry_run=True,
+        worker_address=args.provider_address,
+        requester_address=args.job_requester_address,
     )
     orchestrator = SettlementOrchestrator(repository=repo, chain_client=chain)
 
@@ -84,6 +99,8 @@ def main() -> None:
                 "execution_unit_id": record.execution_unit_id,
                 "escrow_job_id": record.escrow_job_id,
                 "escrow_status": record.escrow_status.value,
+                "provider_address": args.provider_address,
+                "job_requester_address": args.job_requester_address,
                 "result_hash": record.result_hash,
                 "submit_result_tx_hash": record.submit_result_tx_hash,
                 "release_payment_tx_hash": record.release_payment_tx_hash,

@@ -23,6 +23,10 @@ Run demo flow:
 python3 demo/run_sidecar_flow.py
 ```
 
+Default demo addresses:
+- Provider: `0x58FBf65233eFbFFE36Aa3e83DCd7a8813fC65bB9`
+- Job requester: `0x66c18AC12b1D4790939e84AA3476ADfCd8284180`
+
 ## Real chain mode (step 1)
 The sidecar chain client now supports real transactions when `dry_run=False`.
 
@@ -43,8 +47,12 @@ client = ArbitrumEscrowClient(
     rpc_url="https://sepolia-rollup.arbitrum.io/rpc",
     private_key="0x...",
     chain_id=421614,
+    worker_address="0x58FBf65233eFbFFE36Aa3e83DCd7a8813fC65bB9",
+    requester_address="0x66c18AC12b1D4790939e84AA3476ADfCd8284180",
 )
 ```
+
+`requester_address` is validated against the address derived from `private_key` in real mode.
 
 ## Public-safe policy
 - Keep secrets out of git (`.env`, keys, internal endpoints).

@@ -29,6 +29,7 @@ class ArbitrumEscrowClient:
         chain_id: int = 421614,
         contract_abi: Sequence[dict[str, Any]] | None = None,
         worker_address: str | None = None,
+        requester_address: str | None = None,
         default_deadline_seconds: int = 3600,
         tx_timeout_seconds: int = 120,
     ) -> None:
@@ -43,6 +44,7 @@ class ArbitrumEscrowClient:
         self._account = None
         self._contract = None
         self._worker_address = worker_address
+        self._requester_address = requester_address.lower() if requester_address else None
 
         if not self.dry_run:
             self._init_real_mode(
@@ -50,6 +52,7 @@ class ArbitrumEscrowClient:
                 private_key=private_key,
                 contract_abi=contract_abi,
                 worker_address=worker_address,
+                requester_address=requester_address,
             )
 
     def create_job(
@@ -227,6 +230,7 @@ class ArbitrumEscrowClient:
         private_key: str | None,
         contract_abi: Sequence[dict[str, Any]] | None,
         worker_address: str | None,
+        requester_address: str | None,
     ) -> None:
         try:
             from web3 import Web3
@@ -250,6 +254,14 @@ class ArbitrumEscrowClient:
             address=Web3.to_checksum_address(self.contract_address),
             abi=abi,
         )
+
+        if requester_address:
+            requester_checksum = Web3.to_checksum_address(requester_address)
+            if requester_checksum != account.address:
+                raise ValueError(
+                    "private_key account does not match requester_address: "
+                    f"{account.address} != {requester_checksum}"
+                )
 
         if worker_address:
             worker_address = Web3.to_checksum_address(worker_address)
