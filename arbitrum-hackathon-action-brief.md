@@ -1,116 +1,114 @@
-# Arbitrum Hackathon Action Brief (One Page)
+# Arbitrum Hackathon Action Brief (Aligned to Existing Lektra Architecture)
 
 ## 1) Project Thesis (What v1 Is and Is Not)
-Build a working v1 of a solar-powered AI inference marketplace on Arbitrum where payment is escrowed on-chain, outputs are anchored on-chain by hash, and energy usage is signed off-chain and referenced on-chain.
+Build the Arbitrum hackathon demo as an extension of Lektra’s existing cloud-edge platform, not a new stack. Keep current CPS -> NATS -> Lektra Agent -> Ray -> artifact pipeline, and add an Arbitrum settlement layer for escrow, result anchoring, and signed energy claims.
 
 What v1 is:
-- A settlement and auditability layer for compute jobs.
-- An end-to-end demo that proves job creation, result delivery, and payout flow.
-- A practical trust model with bounded dispute handling.
+- A blockchain settlement add-on for existing Lektra compute flows.
+- A working proof that completed inference can trigger verifiable on-chain settlement.
+- A practical trust model with bounded disputes for demo conditions.
 
 What v1 is not:
-- Trustless on-chain inference verification.
-- A fully decentralized arbitration system.
-- A token/DAO launch.
+- A replacement for CPS/Ray/NATS architecture.
+- Trustless on-chain inference correctness verification.
+- A production-grade decentralized court/arbitration system.
 
 ## 2) MVP Scope (On-Chain vs Off-Chain)
-On-chain (Arbitrum Sepolia for demo):
-- Escrow and payout rules.
-- Job state transitions (`createJob`, `submitResult`, `releasePayment`, optional `dispute`).
-- Immutable anchors: `resultHash` and `attestationDigest`.
-- Optional allowlist for trusted attestor keys.
+On-chain (Arbitrum Sepolia):
+- Escrow and payout lifecycle: `createJob`, `submitResult`, `releasePayment`, optional `dispute`.
+- Immutable anchors: `resultHash`, `attestationDigest`, and minimal job metadata.
+- Allowlisted attestor verification (single key in v1).
 
-Off-chain:
-- Inference execution (Ray worker).
-- Artifact storage and result retrieval.
-- Energy measurement and EIP-712 signature creation.
-- Event watching, retries, nonce handling, and operational reliability.
+Off-chain (reuse existing Lektra components):
+- **CPS Backend + Console**: job intake and status UI.
+- **CPS Worker + NATS JetStream**: routing and node assignment (existing offer/accept/commit path).
+- **Lektra Agent + Ray on edge K3s nodes**: execution on current GPU fleet.
+- **Existing artifact flow (GCS/presigned URLs)**: output storage and retrieval.
+- **EOS/Kepler metrics path**: energy measurement source for attestation payload.
+- **Web3 gateway service**: submit on-chain settlement transactions from completion events.
 
-Principle: keep calldata/storage small; anchor hashes on-chain and keep heavy payloads off-chain.
+Principle: add the minimum blockchain delta while preserving current control and data planes.
 
 ## 3) Must-Build Components for the Demo
-Contracts:
-- `InferenceEscrow.sol` on Arbitrum Sepolia.
-- Embedded attestor allowlist or separate `AttestorRegistry`.
+Net-new components:
+- `InferenceEscrow.sol` (Arbitrum Sepolia) with escrow + result anchor + challenge window.
+- EIP-712 attestation schema for `jobId`, `resultHash`, `energyMicroKWh`, time window, nonce.
 
-Backend:
-- Event watcher for `JobCreated`.
-- Dispatcher + worker runner.
-- Transaction sender for `submitResult` with retry logic.
+Extensions to existing Lektra services:
+- CPS task/job model: add `escrowJobId`, `resultHash`, `attestationDigest`, on-chain status fields.
+- Web3 gateway: add Arbitrum provider + escrow contract client (keep existing Base payout path unchanged).
+- Lektra Agent completion payload: include deterministic output hash and energy metrics reference.
+- Console: add blockchain panel (escrow status, tx links, attestor, verify-hash action).
 
-Compute:
-- Ray-backed inference path (GPU if available, deterministic fallback if needed).
-- Output artifact + manifest + `resultHash`.
-
-UI:
-- Create Job view: prompt/input, model profile, escrow amount, submit.
-- Job Detail view: status, hash, energy, attestor, download, verify hash, release/dispute controls.
-
-Attestation:
-- EIP-712 energy attestation signed by an allowlisted attestor key.
-- On-chain verification for demo simplicity or digest-first strategy with full payload off-chain.
+Keep unchanged for hackathon:
+- NATS offer/accept/commit protocol.
+- Ray workload deployment model.
+- Tailscale-based network topology and cluster ops model (RKE2 cloud + K3s edge).
 
 ## 4) Critical Risks and Mitigations
-Risk: inference correctness is not objectively verifiable on-chain in v1.
-- Mitigation: explicitly position chain as settlement/audit layer; support dispute window and freeze payout on dispute.
+Risk: integration drift between existing CPS task states and new escrow states.
+- Mitigation: define explicit state mapping (`PENDING/QUEUED/OFFERED/RUNNING/COMPLETED` <-> on-chain statuses) and enforce idempotent transition handlers.
 
-Risk: weak dispute adjudication undermines trust.
-- Mitigation: use transparent centralized arbiter for hackathon, document as interim model, and include worker bond/slashing policy.
+Risk: chain fragmentation (existing Web3 flow is Base-oriented, new flow is Arbitrum).
+- Mitigation: isolate hackathon chain config in gateway module; avoid touching existing Base payout code path.
 
-Risk: fee bloat from large calldata.
-- Mitigation: store fixed-size hashes on-chain; keep outputs, logs, and full attestation payload off-chain.
+Risk: weak correctness guarantees for inference and energy claims.
+- Mitigation: present claims accurately: integrity anchor + signed attestation, with centralized dispute resolution in v1.
 
-Risk: reliability issues (dropped tx/nonces/duplicate processing).
-- Mitigation: idempotency keys (`jobId`, `txHash+logIndex`), dedicated tx sender, at-least-once submission with fee bumping.
+Risk: secret/key exposure across distributed services.
+- Mitigation: store attestor and tx-sender keys in existing secret management path (Infisical/Kubernetes Secrets), not in worker pods.
 
 ## 5) Cost and Time Constraints
-Transaction footprint per job lifecycle:
-- Baseline 3 calls: `createJob`, `submitResult`, `releasePayment`.
-- Optional 1-2 calls for dispute/resolve.
-- Treat Sepolia measurements as tuning input; keep payloads compact to control fee variability.
+Transaction footprint per lifecycle:
+- Baseline 3 Arbitrum calls: `createJob`, `submitResult`, `releasePayment`.
+- Optional dispute path for demo narrative.
+- Keep calldata compact; pass hashes and pointers only.
 
-Compute budget:
-- Single GPU instance is enough for demo workload.
-- Expected hackathon run cost remains modest for 24-36 active hours.
-- If Lektra hardware is used, cloud spend drops and product narrative improves.
+Infrastructure cost:
+- Reuse existing Lektra edge GPUs and cloud control plane to avoid spinning new infra.
+- If overflow needed, add one temporary GPU node only.
 
 Delivery window:
-- Planning assumes a 3-day build sprint from March 6-8, 2026, with architecture frozen up front and demo script finalized on submission day.
+- 3-day sprint (March 6-8, 2026) assumes reuse-first integration, no platform rewrites.
+- Any change that touches core NATS protocol, Fleet topology, or Ray orchestration is out of scope.
 
 ## 6) Prioritized Execution Plan
-Today (design lock + skeletons):
-- Freeze data model and trust boundaries (on-chain vs off-chain).
-- Finalize contract interface and deploy first version to Arbitrum Sepolia.
-- Stand up storage format + event watcher + tx sender skeleton.
+Today (design + wiring lock):
+- Freeze integration contract: where escrow IDs live in CPS records and what event triggers on-chain submission.
+- Deploy `InferenceEscrow` to Arbitrum Sepolia.
+- Add Arbitrum client module to web3 gateway and wire a mocked `submitResult`.
 
-Day 1 (first full loop):
-- Wire UI `createJob` to contract.
-- Execute full backend path: event -> inference -> artifact -> hash -> `submitResult`.
-- Confirm job status transitions from Created to Submitted.
+Day 1 (end-to-end happy path):
+- Complete one real flow through existing pipeline:
+  Console/CPS job -> NATS -> Agent/Ray -> artifact hash -> gateway `submitResult`.
+- Persist and surface `escrowJobId`, tx hash, and `resultHash` in CPS/Console.
 
-Day 2 (hardening + trust signals):
-- Add EIP-712 energy attestation end-to-end.
-- Implement challenge window logic + payout release path.
-- Stabilize retries, dedupe, and operational logs.
+Day 2 (energy + release + hardening):
+- Add EIP-712 attestation from EOS/Kepler-derived metrics.
+- Enable `releasePayment` path with challenge window gating.
+- Add dedupe and retry logic for event-driven chain submission.
 
-Submission Day (packaging + pitch):
-- Run rehearsed `demo.sh` for deterministic flow.
-- Capture proof points (tx hashes, hashes matched, attestation data).
-- Finalize 60-second pitch and architecture slide.
+Submission Day:
+- Run deterministic demo script with one successful paid job.
+- Show proof points: output hash match, attestation digest, on-chain escrow release.
+- Deliver concise architecture slide: “existing Lektra stack + Arbitrum settlement extension.”
 
 ## 7) Immediate Decisions to Lock (Defaults Chosen)
 Worker model:
-- Default: one dedicated worker per job class with queue-based dispatch (simplest reliable control).
+- Default: keep current CPS worker + Lektra Agent scheduling model; do not introduce a separate blockchain worker fleet.
 
 Attestor model:
-- Default: single allowlisted attestor key in v1 (managed in secure secret store), rotate post-hackathon.
+- Default: single centralized attestor service backed by EOS/Kepler metrics, key managed via existing secrets pipeline.
 
 Dispute policy:
-- Default: centralized operator arbitration with explicit disclosure, bounded challenge window, and worker bond/slashing hooks.
+- Default: centralized operator adjudication with bounded challenge window and explicit disclosure in demo.
+
+Network and chain policy:
+- Default: Arbitrum Sepolia for hackathon escrow; existing Base-related payout services remain untouched unless explicitly required.
 
 ## Top 5 Actions in Next 24 Hours
-1. Ship and deploy `InferenceEscrow` on Arbitrum Sepolia with final event/function signatures.
-2. Stand up watcher -> dispatcher -> tx sender pipeline and prove one successful `submitResult`.
-3. Lock artifact manifest format and client-side hash verification flow.
-4. Implement EIP-712 attestation signing path and bind it to `jobId` + `resultHash`.
-5. Record one complete dry-run script (`create -> submit -> verify -> release`) and use it as demo baseline.
+1. Finalize CPS-to-escrow data contract (`escrowJobId`, `resultHash`, `attestationDigest`, tx status fields).
+2. Deploy `InferenceEscrow` on Arbitrum Sepolia and integrate contract client into the web3 gateway.
+3. Emit deterministic `resultHash` from Lektra Agent completion and persist it through CPS.
+4. Implement first EIP-712 energy attestation using EOS/Kepler-derived metrics.
+5. Execute and record one full pipeline run using existing NATS/Ray/GCS architecture plus on-chain settlement.
