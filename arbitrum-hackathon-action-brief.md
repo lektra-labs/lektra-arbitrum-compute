@@ -1,7 +1,7 @@
 # Arbitrum Hackathon Action Brief (Aligned to Existing Lektra Architecture)
 
 ## 1) Project Thesis (What v1 Is and Is Not)
-Build the Arbitrum hackathon demo as an extension of Lektra’s existing cloud-edge platform, not a new stack. Keep current CPS -> NATS -> Lektra Agent -> Ray -> artifact pipeline, and add an Arbitrum settlement layer for escrow, result anchoring, and signed energy claims.
+Build the Arbitrum hackathon demo as an extension of Lektra’s existing cloud-edge platform, not a new stack. For hackathon v1, use CPS -> Lektra Agent -> Ray -> artifact pipeline through a direct control path (NATS deferred), and add an Arbitrum settlement layer for escrow, result anchoring, and signed energy claims.
 
 What v1 is:
 - A blockchain settlement add-on for existing Lektra compute flows.
@@ -9,7 +9,7 @@ What v1 is:
 - A practical trust model with bounded disputes for demo conditions.
 
 What v1 is not:
-- A replacement for CPS/Ray/NATS architecture.
+- A replacement for CPS/Ray architecture.
 - Trustless on-chain inference correctness verification.
 - A production-grade decentralized court/arbitration system.
 
@@ -21,7 +21,7 @@ On-chain (Arbitrum Sepolia):
 
 Off-chain (reuse existing Lektra components):
 - **CPS Backend + Console**: job intake and status UI.
-- **CPS Worker + NATS JetStream**: routing and node assignment (existing offer/accept/commit path).
+- **CPS Worker + direct agent dispatch**: temporary routing path over existing secure network until NATS is implemented.
 - **Lektra Agent + Ray on edge K3s nodes**: execution on current GPU fleet.
 - **Existing artifact flow (GCS/presigned URLs)**: output storage and retrieval.
 - **EOS/Kepler metrics path**: energy measurement source for attestation payload.
@@ -41,13 +41,16 @@ Extensions to existing Lektra services:
 - Console: add blockchain panel (escrow status, tx links, attestor, verify-hash action).
 
 Keep unchanged for hackathon:
-- NATS offer/accept/commit protocol.
 - Ray workload deployment model.
 - Tailscale-based network topology and cluster ops model (RKE2 cloud + K3s edge).
+- Existing CPS task queue and direct dispatch mechanics (no new control-plane bus rollout during hackathon).
 
 ## 4) Critical Risks and Mitigations
 Risk: integration drift between existing CPS task states and new escrow states.
 - Mitigation: define explicit state mapping (`PENDING/QUEUED/OFFERED/RUNNING/COMPLETED` <-> on-chain statuses) and enforce idempotent transition handlers.
+
+Risk: introducing NATS now would increase delivery risk.
+- Mitigation: keep a thin dispatch adapter interface in CPS; implement direct dispatch now and switch transport to NATS later without changing settlement logic.
 
 Risk: chain fragmentation (existing Web3 flow is Base-oriented, new flow is Arbitrum).
 - Mitigation: isolate hackathon chain config in gateway module; avoid touching existing Base payout code path.
@@ -70,7 +73,7 @@ Infrastructure cost:
 
 Delivery window:
 - 3-day sprint (March 6-8, 2026) assumes reuse-first integration, no platform rewrites.
-- Any change that touches core NATS protocol, Fleet topology, or Ray orchestration is out of scope.
+- NATS implementation itself is out of scope for hackathon v1; Fleet topology and Ray orchestration rewrites are also out of scope.
 
 ## 6) Prioritized Execution Plan
 Today (design + wiring lock):
@@ -80,7 +83,7 @@ Today (design + wiring lock):
 
 Day 1 (end-to-end happy path):
 - Complete one real flow through existing pipeline:
-  Console/CPS job -> NATS -> Agent/Ray -> artifact hash -> gateway `submitResult`.
+  Console/CPS job -> direct dispatch -> Agent/Ray -> artifact hash -> gateway `submitResult`.
 - Persist and surface `escrowJobId`, tx hash, and `resultHash` in CPS/Console.
 
 Day 2 (energy + release + hardening):
@@ -106,9 +109,12 @@ Dispute policy:
 Network and chain policy:
 - Default: Arbitrum Sepolia for hackathon escrow; existing Base-related payout services remain untouched unless explicitly required.
 
+Control-plane policy:
+- Default: direct CPS-to-Agent dispatch for v1 hackathon; NATS migration planned post-hackathon.
+
 ## Top 5 Actions in Next 24 Hours
 1. Finalize CPS-to-escrow data contract (`escrowJobId`, `resultHash`, `attestationDigest`, tx status fields).
 2. Deploy `InferenceEscrow` on Arbitrum Sepolia and integrate contract client into the web3 gateway.
 3. Emit deterministic `resultHash` from Lektra Agent completion and persist it through CPS.
 4. Implement first EIP-712 energy attestation using EOS/Kepler-derived metrics.
-5. Execute and record one full pipeline run using existing NATS/Ray/GCS architecture plus on-chain settlement.
+5. Execute and record one full pipeline run using direct CPS dispatch + existing Ray/GCS architecture plus on-chain settlement.
