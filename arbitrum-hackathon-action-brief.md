@@ -1,10 +1,10 @@
 # Arbitrum Hackathon Action Brief (Public-Safe)
 
 ## 1) Project Thesis (What v1 Is and Is Not)
-Build the Arbitrum hackathon demo as a sidecar extension around an existing compute platform. For hackathon v1, keep the existing backend and frontend unchanged, use current job execution behavior as-is, and add Arbitrum settlement in a separate repo/service.
+Build the Arbitrum hackathon demo as Lektra's settlement capability for its solar-powered AI compute network. For hackathon v1, keep the existing backend and frontend unchanged, use current job execution behavior as-is, and implement Arbitrum settlement through a separate integration service (sidecar pattern).
 
 What v1 is:
-- A blockchain settlement add-on for existing compute flows.
+- A product capability that adds verifiable blockchain settlement to existing compute flows.
 - A working proof that completed inference can trigger verifiable on-chain settlement.
 - A practical trust model with bounded disputes for demo conditions.
 
@@ -26,23 +26,23 @@ Off-chain (reuse existing platform components):
 - **Existing inference runtime (Ray-based)**: execution on current GPU fleet.
 - **Existing artifact storage flow**: output storage and retrieval.
 - **Existing energy telemetry path**: measurement source for attestation payload.
-- **Hackathon sidecar service (new repo)**: polls/consumes task status and submits on-chain settlement transactions.
+- **Settlement integration service (implemented as a sidecar in this repo)**: polls/consumes task status and submits on-chain settlement transactions.
 
-Principle: add the minimum blockchain delta without editing existing production codebases.
+Principle: position this as a Lektra product capability; use sidecar only as the execution pattern to add blockchain functionality without editing existing production codebases.
 
 ## 3) Must-Build Components for the Demo
 Net-new components:
 - `InferenceEscrow.sol` (Arbitrum Sepolia) with escrow + result anchor + challenge window.
 - EIP-712 attestation schema for `jobId`, `resultHash`, `energyMicroKWh`, time window, nonce.
 
-Hackathon sidecar components (new repo only):
-- Sidecar orchestrator that:
+Hackathon integration components (new repo only):
+- Settlement integration orchestrator (sidecar) that:
   - creates escrow jobs on Arbitrum,
   - tracks task/unit completion via existing read APIs,
   - computes/stores settlement metadata (`resultHash`, `attestationDigest`),
   - submits `submitResult` and `releasePayment`.
-- Sidecar persistence (small DB/table) keyed by backend `task_id`/`execution_unit_id`.
-- Optional minimal sidecar UI/CLI for blockchain proof display (tx hash, status, attestation digest).
+- Integration-service persistence (small DB/table) keyed by backend `task_id`/`execution_unit_id`.
+- Optional minimal integration-service UI/CLI for blockchain proof display (tx hash, status, attestation digest).
 
 Keep unchanged for hackathon:
 - Existing workload deployment model.
@@ -52,13 +52,13 @@ Keep unchanged for hackathon:
 
 ## 4) Critical Risks and Mitigations
 Risk: integration drift between existing backend task states and new escrow states.
-- Mitigation: define explicit mapping in sidecar storage (`backend state` <-> `escrow_status`) and enforce idempotent sidecar handlers.
+- Mitigation: define explicit mapping in integration-service storage (`backend state` <-> `escrow_status`) and enforce idempotent handlers.
 
 Risk: introducing a new message bus now would increase delivery risk.
 - Mitigation: keep a thin dispatch adapter interface; implement direct dispatch now and switch transport later without changing settlement logic.
 
 Risk: chain fragmentation (existing payment flows use another chain, new flow uses Arbitrum).
-- Mitigation: isolate Arbitrum logic in sidecar; avoid touching existing payment code paths.
+- Mitigation: isolate Arbitrum logic in the integration service (sidecar); avoid touching existing payment code paths.
 
 Risk: weak correctness guarantees for inference and energy claims.
 - Mitigation: present claims accurately: integrity anchor + signed attestation, with centralized dispute resolution in v1.
@@ -77,19 +77,19 @@ Infrastructure cost:
 - If overflow needed, add one temporary GPU node only.
 
 Delivery window:
-- 3-day sprint (March 6-8, 2026) assumes sidecar-only integration and no platform rewrites.
+- 3-day sprint (March 6-8, 2026) assumes integration-service delivery (sidecar pattern) and no platform rewrites.
 - Message bus migration is out of scope for hackathon v1; major topology/runtime rewrites are also out of scope.
 
 ## 6) Prioritized Execution Plan
 Today (design + wiring lock):
-- Freeze sidecar mapping contract: how `task_id/execution_unit_id` map to `escrow_job_id` in sidecar storage.
+- Freeze integration-service mapping contract: how `task_id/execution_unit_id` map to `escrow_job_id` in settlement storage.
 - Deploy `InferenceEscrow` to Arbitrum Sepolia.
-- Build sidecar Arbitrum client and wire mocked `submitResult`.
+- Build integration-service Arbitrum client and wire mocked `submitResult`.
 
 Day 1 (end-to-end happy path):
 - Complete one real flow through existing pipeline:
-  UI/backend job -> direct dispatch -> runtime -> sidecar -> `submitResult`.
-- Persist and surface `escrowJobId`, tx hash, and `resultHash` in sidecar dashboard/CLI.
+  UI/backend job -> direct dispatch -> runtime -> settlement integration service -> `submitResult`.
+- Persist and surface `escrowJobId`, tx hash, and `resultHash` in integration-service dashboard/CLI.
 
 Day 2 (energy + release + hardening):
 - Add EIP-712 attestation from available energy telemetry.
@@ -99,11 +99,11 @@ Day 2 (energy + release + hardening):
 Submission Day:
 - Run deterministic demo script with one successful paid job.
 - Show proof points: output hash match, attestation digest, on-chain escrow release.
-- Deliver concise architecture slide: “existing stack + Arbitrum settlement extension.”
+- Deliver concise architecture slide: “Lektra compute network + Arbitrum settlement capability.”
 
 ## 7) Immediate Decisions to Lock (Defaults Chosen)
 Worker model:
-- Default: keep current worker scheduling model; sidecar handles blockchain actions.
+- Default: keep current worker scheduling model; integration service (sidecar pattern) handles blockchain actions.
 
 Attestor model:
 - Default: single centralized attestor service backed by available energy telemetry, key managed via a secure secret pipeline.
@@ -121,8 +121,8 @@ Repo boundary policy:
 - Default: no commits to core production repos; all hackathon code lives in a separate repo.
 
 ## Top 5 Actions in Next 24 Hours
-1. Finalize sidecar mapping contract (`task_id`, `execution_unit_id`, `escrowJobId`, `resultHash`, `attestationDigest`, tx status fields).
-2. Deploy `InferenceEscrow` on Arbitrum Sepolia and integrate contract client into sidecar.
-3. Pull deterministic completion/result artifacts from existing backend APIs and persist settlement state in sidecar.
+1. Finalize integration-service mapping contract (`task_id`, `execution_unit_id`, `escrowJobId`, `resultHash`, `attestationDigest`, tx status fields).
+2. Deploy `InferenceEscrow` on Arbitrum Sepolia and integrate contract client into the integration service.
+3. Pull deterministic completion/result artifacts from existing backend APIs and persist settlement state in the integration service.
 4. Implement first EIP-712 energy attestation using available energy telemetry.
-5. Execute and record one full pipeline run using existing runtime/storage plus sidecar on-chain settlement.
+5. Execute and record one full pipeline run using existing runtime/storage plus integration-service on-chain settlement.

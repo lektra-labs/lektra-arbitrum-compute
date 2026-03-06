@@ -1,7 +1,7 @@
 Solar-powered AI compute settlement layer using Arbitrum and Ray clusters.
 
 ## Purpose
-This repository contains a public-safe hackathon sidecar implementation that adds on-chain escrow settlement to an existing compute backend without modifying production repositories.
+This repository contains the hackathon implementation of Lektra's on-chain settlement capability on Arbitrum. It integrates with the existing compute backend through a sidecar execution pattern so core production repositories remain unchanged.
 
 ## What's here
 - `cps_settlement/`: settlement state model and transition rules.
