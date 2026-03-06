@@ -54,6 +54,38 @@ client = ArbitrumEscrowClient(
 
 `requester_address` is validated against the address derived from `private_key` in real mode.
 
+## Run real flow
+1. Copy env template:
+
+```bash
+cp .env.example .env
+```
+
+2. Fill required values in `.env`:
+- `BACKEND_API_URL`
+- `ARBITRUM_RPC_URL`
+- `ESCROW_CONTRACT_ADDRESS`
+- `TX_SENDER_PRIVATE_KEY`
+- `PROVIDER_ADDRESS`
+- `JOB_REQUESTER_ADDRESS`
+- `TASK_ID`
+- `EXECUTION_UNIT_ID`
+
+3. Run:
+
+```bash
+python3 demo/run_real_flow.py --auto-release
+```
+
+Or pass IDs directly:
+
+```bash
+python3 demo/run_real_flow.py \
+  --task-id <task_id> \
+  --execution-unit-id <execution_unit_id> \
+  --auto-release
+```
+
 ## Public-safe policy
 - Keep secrets out of git (`.env`, keys, internal endpoints).
 - Use generic architecture wording in docs.
