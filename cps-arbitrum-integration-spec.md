@@ -1,14 +1,14 @@
-# CPS-Arbitrum Integration Card (Hackathon v1, No-Touch Repos)
+# Backend-Arbitrum Integration Card (Hackathon v1, Public-Safe)
 
 ## 1) What We Are Building
-Add Arbitrum escrow settlement as a sidecar around existing Lektra systems.
+Add Arbitrum escrow settlement as a sidecar around an existing compute platform.
 
 Keep unchanged (read-only):
-- `compute-platform-services`
-- `compute-platform-console`
+- core backend repository
+- core frontend repository
 
 Observed execution path for v1:
-- `Console -> CPS Backend -> CPS Worker -> Lektra Agent -> Ray -> Artifact Store`
+- `UI -> backend API -> worker -> runtime -> artifact store`
 
 Added sidecar responsibilities:
 - `createJob` (escrow created)
@@ -20,11 +20,11 @@ Added sidecar responsibilities:
 - Currency: ETH escrow
 - Attestor: single allowlisted key
 - Disputes: centralized operator decision
-- Control transport: direct CPS-to-Agent behavior remains as-is; NATS later
-- Repo boundary: no commits to CPS/Console repos during hackathon
+- Control transport: direct dispatch behavior remains as-is; message bus later
+- Repo boundary: no commits to core backend/frontend repos during hackathon
 
 ## 3) Single Source of Truth
-- Compute lifecycle stays in CPS (read-only for sidecar).
+- Compute lifecycle stays in backend (read-only for sidecar).
 - Settlement lifecycle is tracked in sidecar storage as `escrow_status`.
 
 `escrow_status` enum:
@@ -36,7 +36,7 @@ Added sidecar responsibilities:
 - `REFUNDED`
 
 Rule:
-- Sidecar mirrors CPS status; it does not mutate CPS compute state.
+- Sidecar mirrors backend status; it does not mutate backend compute state.
 
 ## 4) Minimal Sidecar Data Contract
 Store these fields in sidecar DB (keyed by `task_id` + `execution_unit_id`):
@@ -66,13 +66,13 @@ When:
 - Demo run starts via sidecar command/API.
 
 Do:
-- Sidecar creates CPS task (or receives task id if user created from Console).
+- Sidecar creates backend task (or receives task id if user created from the UI).
 - Sidecar sends `createJob` on Arbitrum.
 - Persist `escrow_job_id`, set `escrow_status=CREATED`.
 
 ### B) `submitResult`
 When:
-- Sidecar polling detects CPS execution unit completion and artifact availability.
+- Sidecar polling detects backend execution unit completion and artifact availability.
 
 Preconditions:
 - Artifact exists and is retrievable.
@@ -94,13 +94,13 @@ Do:
 - Set `escrow_status=PAYMENT_RELEASED`.
 
 ## 6) External Inputs (Read-Only)
-From CPS APIs:
+From backend APIs:
 - task creation response (`task_id`, unit ids)
 - unit status and completion state
 - artifact/resource references for hash verification
 
 From energy path:
-- EOS/Kepler-derived measurement if available
+- telemetry-derived measurement if available
 - fallback: clearly labeled demo estimate/simulation
 
 From chain:
@@ -109,7 +109,7 @@ From chain:
 ## 7) Reliability Rules (Short Version)
 - Idempotency key format: `<chain>:<contract>:<escrow_job_id>:<action>`
 - One successful tx per action (`submit`, `release`)
-- Duplicate CPS completion detections become no-op after first successful `submitResult`
+- Duplicate completion detections become no-op after first successful `submitResult`
 - Retry transient RPC/mempool errors with backoff, same logical idempotency key
 
 ## 8) Security Rules (Must-Have)
@@ -119,7 +119,7 @@ From chain:
 - Signature domain includes chain ID + contract address
 
 ## 9) Done Definition
-1. One real CPS task is linked to one Arbitrum `escrow_job_id` in sidecar storage.
+1. One real backend task is linked to one Arbitrum `escrow_job_id` in sidecar storage.
 2. Sidecar submits `submitResult` with persisted tx hash and status `RESULT_SUBMITTED`.
 3. Sidecar submits `releasePayment` and status becomes `PAYMENT_RELEASED`.
 4. Reprocessing the same completion event does not create duplicate on-chain submissions.
