@@ -54,7 +54,7 @@ client = ArbitrumEscrowClient(
 
 `requester_address` is validated against the address derived from `private_key` in real mode.
 
-## Run real flow
+## Real flow config
 1. Copy env template:
 
 ```bash
@@ -63,6 +63,7 @@ cp .env.example .env
 
 2. Fill required values in `.env`:
 - `BACKEND_API_URL`
+- `BACKEND_BEARER_TOKEN` (required if CPS auth is enabled)
 - `ARBITRUM_RPC_URL`
 - `ESCROW_CONTRACT_ADDRESS`
 - `TX_SENDER_PRIVATE_KEY`
@@ -71,20 +72,73 @@ cp .env.example .env
 - `TASK_ID`
 - `EXECUTION_UNIT_ID`
 
-3. Run:
+## Escrow contract deployment (Arbitrum Sepolia)
+This repo now includes a minimal Foundry contract/deploy setup in `contracts/`.
 
+### 1. Install Foundry
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+source ~/.zshrc
+foundryup
+```
+
+### 2. Build contract
+```bash
+cd contracts
+forge install foundry-rs/forge-std
+forge build
+```
+
+### 3. Deploy to Arbitrum Sepolia
+```bash
+export ARBITRUM_RPC_URL="https://arb-sepolia.g.alchemy.com/v2/<ALCHEMY_KEY>"
+export DEPLOYER_PRIVATE_KEY="0x<DEPLOYER_PRIVATE_KEY>"
+forge script script/Deploy.s.sol:Deploy --rpc-url "$ARBITRUM_RPC_URL" --broadcast
+```
+
+Copy the contract address from output and set:
+- `ESCROW_CONTRACT_ADDRESS=0x...`
+
+## Real flow prerequisites (local dev)
+Before running `demo/run_real_flow.py`, ensure:
+
+1. `compute-platform-services` is running and reachable:
+```bash
+curl http://localhost:8000/health
+```
+2. DB has a valid `TASK_ID` and matching `EXECUTION_UNIT_ID`.
+3. `.env` is configured as shown in the `Real flow config` section above.
+
+Important:
+- `JOB_REQUESTER_ADDRESS` must match the address derived from `TX_SENDER_PRIVATE_KEY` in real mode.
+
+## Run real flow
+Default (uses `TASK_ID` and `EXECUTION_UNIT_ID` from `.env`):
 ```bash
 python3 demo/run_real_flow.py --auto-release
 ```
 
 Or pass IDs directly:
-
 ```bash
 python3 demo/run_real_flow.py \
   --task-id <task_id> \
   --execution-unit-id <execution_unit_id> \
   --auto-release
 ```
+
+## Troubleshooting
+- `ModuleNotFoundError: No module named 'web3'`:
+```bash
+python3 -m pip install web3
+```
+- `private_key account does not match requester_address`:
+  Set `JOB_REQUESTER_ADDRESS` to the address derived from `TX_SENDER_PRIVATE_KEY`.
+- `backend API error 403 ... Not authenticated`:
+  Provide `BACKEND_BEARER_TOKEN` or use a local auth-bypass configuration for development.
+- `execution reverted: bad msg.value`:
+  Ensure you are using the latest deployed escrow contract address that matches current sidecar expectations.
+- If secrets were shared during testing:
+  Rotate API keys and private keys immediately.
 
 ## Public-safe policy
 - Keep secrets out of git (`.env`, keys, internal endpoints).
