@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lektra Console One-Screen Prototype</title>
+  <style>
+    :root {
+      --nav: #07162f;
+      --nav-soft: #34415a;
+      --workspace: #ececef;
+      --card: #ffffff;
+      --panel: #f6f6f8;
+      --line: #d4d6dc;
+      --ink: #15161b;
+      --muted: #727887;
+      --green: #63b57a;
+      --blue: #6fa0d8;
+      --teal: #8ec3c2;
+      --rose: #e6b7c1;
+      --salmon: #ef7f7d;
+      --shadow: 0 16px 36px rgba(15, 16, 24, 0.12);
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #d7d7db;
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .page {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+
+    .intro {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #60697b;
+      font-weight: 700;
+    }
+
+    .intro h1 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .intro p {
+      max-width: 86ch;
+      color: #60697b;
+      line-height: 1.45;
+    }
+
+    .app-shell {
+      min-height: 920px;
+      display: grid;
+      grid-template-columns: 252px 1fr;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid #cfd2d8;
+      box-shadow: var(--shadow);
+      background: var(--workspace);
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #07162f 0%, #06122a 100%);
+      color: #ffffff;
+      padding: 20px 18px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      margin-bottom: 32px;
+      letter-spacing: -0.04em;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      padding: 12px;
+      border-radius: 10px;
+      color: #eef2f7;
+      font-size: 15px;
+    }
+
+    .nav-item.active {
+      background: var(--nav-soft);
+    }
+
+    .nav-item.dim {
+      color: #d1d8e4;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .balance strong {
+      display: block;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .balance span,
+    .profile small {
+      color: #d1d8e4;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a9d37c, #59843d);
+    }
+
+    .workspace {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .topbar h2 {
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .topbar p {
+      color: var(--muted);
+      max-width: 72ch;
+      line-height: 1.45;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #eff3f8;
+      color: #41506a;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge.green {
+      background: #e6f3ea;
+      color: #2f7a48;
+    }
+
+    .badge.blue {
+      background: #e7f0fb;
+      color: #3b6796;
+    }
+
+    .badge.rose {
+      background: #f7e8ee;
+      color: #8f5064;
+    }
+
+    .composer {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(22, 22, 29, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr 116px;
+      gap: 12px;
+    }
+
+    .prompt-box {
+      min-height: 84px;
+      border-radius: 10px;
+      border: 1px solid #cfd2d8;
+      background: #f5f5f6;
+      padding: 12px 14px;
+      color: #2f3440;
+      line-height: 1.4;
+    }
+
+    .composer-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .chip,
+    .button,
+    .btn {
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid #d4d6dc;
+      background: #f7f7f8;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .button,
+    .btn.primary {
+      background: #15161b;
+      color: white;
+      border-color: #15161b;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      box-shadow: none;
+    }
+
+    .btn.soft {
+      background: #ffffff;
+    }
+
+    .btn.warn {
+      background: #fff0ee;
+      color: #9c3f36;
+      border-color: #efc8c0;
+    }
+
+    .summary-strip {
+      display: none;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat strong {
+      font-size: 22px;
+    }
+
+    .results-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      align-items: start;
+      position: relative;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel-header,
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel-header h3 {
+      font-size: 17px;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .image-card,
+    .list-item,
+    .accordion-toggle,
+    .billing-row {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .image-card,
+    .list-item {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .image-card:hover,
+    .list-item:hover,
+    .accordion-toggle:hover,
+    .billing-row:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(24, 24, 28, 0.09);
+      border-color: #bac3d2;
+    }
+
+    .is-selected {
+      border-color: #6d88bd;
+      box-shadow: 0 0 0 3px rgba(111, 160, 216, 0.2);
+    }
+
+    .art {
+      height: 220px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(146, 183, 213, 0.26), rgba(112, 131, 155, 0.10)),
+        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .art::before,
+    .art::after {
+      content: "";
+      position: absolute;
+      border-radius: 50% 50% 12% 12%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(210,221,232,0.92));
+    }
+
+    .art::before {
+      width: 78%;
+      height: 62%;
+      left: -6%;
+      bottom: -8%;
+      transform: rotate(-8deg);
+    }
+
+    .art::after {
+      width: 58%;
+      height: 52%;
+      right: -4%;
+      bottom: -6%;
+      transform: rotate(8deg);
+    }
+
+    .art.alt::before {
+      width: 70%;
+      height: 46%;
+      left: 6%;
+      bottom: -2%;
+    }
+
+    .art.alt::after {
+      width: 40%;
+      height: 40%;
+      right: 10%;
+      bottom: 2%;
+    }
+
+    .art.split::before {
+      width: 100%;
+      height: 40%;
+      left: 0;
+      bottom: 48%;
+      border-radius: 0;
+      background: linear-gradient(180deg, rgba(103, 144, 183, 0.3), rgba(242, 245, 248, 0.8));
+    }
+
+    .art.split::after {
+      width: 100%;
+      height: 46%;
+      left: 0;
+      bottom: 0;
+      border-radius: 0;
+      background:
+        linear-gradient(180deg, rgba(146, 183, 213, 0.18), rgba(112, 131, 155, 0.06)),
+        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
+    }
+
+    .accordion-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .accordion-item {
+      display: grid;
+      gap: 10px;
+    }
+
+    .accordion-toggle {
+      width: 100%;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .accordion-toggle::after {
+      content: "+";
+      font-size: 20px;
+      color: #56647d;
+    }
+
+    .accordion-item.is-open .accordion-toggle::after {
+      content: "-";
+    }
+
+    .accordion-content {
+      display: none;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .accordion-item.is-open .accordion-content {
+      display: grid;
+      gap: 14px;
+    }
+
+    .execution-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .execution-layout.has-settlement {
+      grid-template-columns: minmax(0, 1fr) 360px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .axis {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar-row {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: #fafbfc;
+      cursor: pointer;
+    }
+
+    .bar-label {
+      font-size: 13px;
+      color: #454b57;
+    }
+
+    .track {
+      height: 30px;
+      position: relative;
+    }
+
+    .segment {
+      position: absolute;
+      top: 0;
+      height: 30px;
+      border-radius: 6px;
+      opacity: 0.95;
+    }
+
+    .segment-btn {
+      border: 0;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .selection-panel {
+      background: #fbfcfd;
+      border: 1px dashed #c6ccd7;
+      border-radius: 12px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .timeline-footer {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px dashed #c6ccd7;
+      border-radius: 12px;
+      background: #fbfcfd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .settlement-box.is-hidden {
+      display: none;
+    }
+
+    .settlement-box {
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .settlement-focus {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #d7dce5;
+      background: #fbfcfd;
+    }
+
+    .settlement-focus-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .settlement-focus-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .compact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .compact-field {
+      background: #fbfcfd;
+      border: 1px solid #d7dce5;
+      border-radius: 10px;
+      padding: 10px 11px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .mono {
+      font-family: "SF Mono", "Menlo", monospace;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .status-line {
+      min-height: 20px;
+      color: #4e6186;
+      font-size: 13px;
+    }
+
+    .panel-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .billing-table {
+      display: grid;
+      gap: 10px;
+    }
+
+    .billing-row {
+      width: 100%;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 110px 1fr 160px 90px 150px;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+    }
+
+    @media (max-width: 1280px) {
+      .image-grid,
+      .billing-row,
+      .execution-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .compact-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 880px) {
+      .app-shell,
+      .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <span class="eyebrow">Lektra Console Extension</span>
+      <h1>One-screen UX for prompt, multi-node execution, and settlement proof.</h1>
+      <p>
+        This version keeps everything in one workspace. Instead of separate mock screens, the user stays on one task view and opens or closes the parts they need:
+        results, orchestration detail, failure handling, settlement proof, and billing explanation.
+      </p>
+    </section>
+
+    <section class="app-shell">
+      <aside class="sidebar">
+        <div class="logo">Lektra</div>
+        <nav class="nav">
+          <div class="nav-item active">Generate</div>
+          <div class="nav-item dim">Tasks</div>
+          <div class="nav-item dim">Nodes</div>
+          <div class="nav-item dim">Keys</div>
+          <div class="nav-item dim">Billing</div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="balance">
+            <strong>$40.80</strong>
+            <span>Balance</span>
+          </div>
+          <div class="profile">
+            <div class="avatar"></div>
+            <div>
+              <strong>Vitaly</strong><br>
+              <small>vitaly@yuxt.com</small>
+            </div>
+          </div>
+          <div class="nav-item dim">Logout</div>
+        </div>
+      </aside>
+
+      <section class="workspace">
+        <div class="topbar">
+          <div>
+            <h2>Generate with proof on demand</h2>
+            <p>
+              One task creates 4 returned images. The first execution starts on Node 003 (Exxact), fails over to Node 001 (Lektra), and the rest complete on Nodes 006 and 007 without leaving the main task view.
+            </p>
+          </div>
+          <span class="badge" id="global-settlement-badge">5 settlement records</span>
+        </div>
+
+        <div class="composer">
+          <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+          <div class="composer-side">
+            <div class="chip">DreamShaper</div>
+            <div class="button">Generate</div>
+          </div>
+        </div>
+
+        <div class="summary-strip">
+          <div class="stat">
+            <span>Images returned</span>
+            <strong>4</strong>
+          </div>
+          <div class="stat">
+            <span>Execution units</span>
+            <strong>5 total</strong>
+          </div>
+          <div class="stat">
+            <span>Nodes used</span>
+            <strong>003, 006, 007</strong>
+          </div>
+          <div class="stat">
+            <span>Node health</span>
+            <strong>1 failed</strong>
+          </div>
+        </div>
+
+        <div class="results-layout">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Results</h3>
+              <span class="subtle">Click an output to load task, retry, and settlement context</span>
+            </div>
+
+            <div class="image-grid">
+              <button class="image-card is-selected" data-variant-select="Variant A" data-task="task-8948" data-unit="unit-01" data-node="Node 001 - Lektra" data-role="Failover completion after Node 003 failure" data-duration="10.66s" data-result="Primary output selected">
+                <div class="art"></div>
+                <div class="row">
+                  <strong>Variant A</strong>
+                  <span class="badge blue">Node 001</span>
+                </div>
+                <div class="row">
+                  <span class="subtle">10.66s failover path</span>
+                  <span class="badge green">Proof ready</span>
+                </div>
+              </button>
+
+              <button class="image-card" data-variant-select="Variant B" data-task="task-8948" data-unit="unit-02" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="3.40s" data-result="Secondary output selected">
+                <div class="art alt"></div>
+                <div class="row">
+                  <strong>Variant B</strong>
+                  <span class="badge blue">Node 007</span>
+                </div>
+                <div class="row">
+                  <span class="subtle">3.40s render</span>
+                  <span class="badge green">Proof ready</span>
+                </div>
+              </button>
+
+              <button class="image-card" data-variant-select="Variant C" data-task="task-8948" data-unit="unit-03" data-node="Node 006 - EG4" data-role="EG4 / image generation" data-duration="3.26s" data-result="Third output selected">
+                <div class="art"></div>
+                <div class="row">
+                  <strong>Variant C</strong>
+                  <span class="badge blue">Node 006</span>
+                </div>
+                <div class="row">
+                  <span class="subtle">3.26s render</span>
+                  <span class="badge green">Proof ready</span>
+                </div>
+              </button>
+
+              <button class="image-card" data-variant-select="Variant D" data-task="task-8948" data-unit="unit-04" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="7.97s" data-result="Fourth output selected">
+                <div class="art split"></div>
+                <div class="row">
+                  <strong>Variant D</strong>
+                  <span class="badge blue">Node 007</span>
+                </div>
+                <div class="row">
+                  <span class="subtle">7.97s render</span>
+                  <span class="badge green">Proof ready</span>
+                </div>
+              </button>
+            </div>
+
+            <div class="accordion-stack">
+              <div class="accordion-item is-open" id="execution-accordion">
+                <button class="accordion-toggle" data-accordion-target="execution-content">
+                  <span>Execution Timeline</span>
+                  <span class="subtle">Total execution units: 4</span>
+                </button>
+                <div class="accordion-content" id="execution-content">
+                  <div class="execution-layout" id="execution-layout">
+                    <div>
+                      <div class="subtle">Total duration: 10.66 seconds</div>
+                      <div class="axis">
+                        <span>09:04:01</span>
+                        <span>09:04:03</span>
+                        <span>09:04:04</span>
+                        <span>09:04:06</span>
+                        <span>09:04:08</span>
+                        <span>09:04:10</span>
+                      </div>
+                      <div class="timeline">
+                        <div class="bar-row is-selected" data-unit-select="unit-01" data-node="Node 001 - Lektra" data-role="Node 003 failed, task rerouted to Node 001" data-duration="10.66s" data-result="Node 003 (Exxact) failed and Node 001 (Lektra) completed the output">
+                          <div class="bar-label">10.66 S Node 003 - Exxact -&gt; Node 001 - Lektra</div>
+                          <div class="track">
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-failure" style="left: 2%; width: 72%; background: var(--salmon);"></button>
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-recovery" style="left: 77%; width: 18%; background: #a5d7a7;"></button>
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-recovery" style="left: 80%; width: 14%; background: #7db2c4;"></button>
+                          </div>
+                        </div>
+
+                        <div class="bar-row" data-unit-select="unit-02" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="3.40s" data-result="Generated second image output">
+                          <div class="bar-label">3.40 S Node 007 - EG4</div>
+                          <div class="track">
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007a" style="left: 2%; width: 30%; background: var(--teal);"></button>
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007a" style="left: 12%; width: 12%; background: var(--blue);"></button>
+                          </div>
+                        </div>
+
+                        <div class="bar-row" data-unit-select="unit-03" data-node="Node 006 - EG4" data-role="EG4 / image generation" data-duration="3.26s" data-result="Generated third image output">
+                          <div class="bar-label">3.26 S Node 006 - EG4</div>
+                          <div class="track">
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node006" style="left: 2%; width: 29%; background: #a8c5f0;"></button>
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node006" style="left: 11.5%; width: 12%; background: #7ea5ec;"></button>
+                          </div>
+                        </div>
+
+                        <div class="bar-row" data-unit-select="unit-04" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="7.97s" data-result="Generated fourth image output">
+                          <div class="bar-label">7.97 S Node 007 - EG4</div>
+                          <div class="track">
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007b" style="left: 3%; width: 68%; background: var(--rose);"></button>
+                            <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007b" style="left: 25%; width: 10%; background: #a5acef;"></button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="timeline-footer">
+                        <div class="subtle">Click any colored bar to open the matching settlement proof.</div>
+                        <button class="btn soft" data-accordion-open="billing-content">Open billing trace</button>
+                      </div>
+                    </div>
+
+                    <div class="panel settlement-box is-hidden" id="settlement-panel">
+                      <div class="panel-header">
+                        <h3>Settlement proof</h3>
+                        <span class="badge" id="settlement-badge">Disputed</span>
+                      </div>
+
+                      <div class="panel-body">
+                        <div class="settlement-focus">
+                          <div class="settlement-focus-top">
+                            <strong id="selected-unit-id">unit-01</strong>
+                            <div class="settlement-focus-meta">
+                              <span class="badge blue" id="selected-unit-node">Node 001 - Lektra</span>
+                              <strong id="selected-unit-duration">10.66s</strong>
+                            </div>
+                          </div>
+                          <div class="subtle" id="selected-unit-role">Node 003 failed, task rerouted to Node 001</div>
+                          <div class="subtle" id="selected-unit-result">Node 003 (Exxact) failed and Node 001 (Lektra) completed the output</div>
+                        </div>
+
+                        <div class="compact-grid">
+                          <div class="compact-field">
+                            <div class="subtle">Selected output</div>
+                            <strong id="settlement-variant">Variant A</strong>
+                          </div>
+                          <div class="compact-field">
+                            <div class="subtle">Task</div>
+                            <div class="mono" id="settlement-task">task-8948</div>
+                          </div>
+                          <div class="compact-field">
+                            <div class="subtle">Settlement record</div>
+                            <div id="settlement-record-label">Node 003 failure settlement</div>
+                          </div>
+                          <div class="compact-field">
+                            <div class="subtle">Execution unit</div>
+                            <div class="mono" id="settlement-unit">unit-01a</div>
+                          </div>
+                          <div class="compact-field">
+                            <div class="subtle">Settlement executor</div>
+                            <div class="mono" id="settlement-nodes">Node 003 - Exxact</div>
+                          </div>
+                          <div class="compact-field">
+                            <div class="subtle">Settlement state</div>
+                            <div id="settlement-window">Disputed automatically after execution failure</div>
+                          </div>
+                          <div class="compact-field" style="grid-column: 1 / -1;">
+                            <div class="subtle">Submit tx hash</div>
+                            <div class="mono" id="settlement-tx">0x9f31ab44e2dd1100aa3344bbccde</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="panel-actions">
+                        <button class="btn primary" id="release-btn" disabled>Release selected</button>
+                        <button class="btn soft" id="copy-btn">Copy proof</button>
+                        <button class="btn warn" id="dispute-btn">Dispute</button>
+                        <button class="btn soft" id="close-settlement-btn">Close</button>
+                      </div>
+
+                      <div class="status-line" id="status-line"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="billing-accordion">
+                <button class="accordion-toggle" data-accordion-target="billing-content">
+                  <span>Billing trace</span>
+                  <span class="subtle">Prompt -> task -> settlement</span>
+                </button>
+                <div class="accordion-content" id="billing-content">
+                  <div class="billing-table">
+                    <button class="billing-row is-selected" data-billing-task="task-8948">
+                      <span class="mono">task-8948</span>
+                      <span>Mountains made of plush with snow covering tops</span>
+                      <span>001, 006, 007 (003 failed)</span>
+                      <span>$0.20</span>
+                      <span class="badge" data-billing-status="task-8948">4 successful, 1 failed</span>
+                    </button>
+                    <button class="billing-row" data-billing-task="task-8947">
+                      <span class="mono">task-8947</span>
+                      <span>Storm clouds over a neon city</span>
+                      <span>004, 007</span>
+                      <span>$0.12</span>
+                      <span class="badge" data-billing-status="task-8947">Challenge window</span>
+                    </button>
+                    <button class="billing-row" data-billing-task="task-8941">
+                      <span class="mono">task-8941</span>
+                      <span>Abstract moss terrain macro shot</span>
+                      <span>005</span>
+                      <span>$0.08</span>
+                      <span class="badge rose" data-billing-status="task-8941">Refunded</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const settlementPanel = document.getElementById("settlement-panel");
+    const executionLayout = document.getElementById("execution-layout");
+    const settlementVariant = document.getElementById("settlement-variant");
+    const settlementTask = document.getElementById("settlement-task");
+    const settlementRecordLabel = document.getElementById("settlement-record-label");
+    const settlementUnit = document.getElementById("settlement-unit");
+    const settlementNodes = document.getElementById("settlement-nodes");
+    const settlementTx = document.getElementById("settlement-tx");
+    const settlementWindow = document.getElementById("settlement-window");
+    const settlementBadge = document.getElementById("settlement-badge");
+    const globalSettlementBadge = document.getElementById("global-settlement-badge");
+    const statusLine = document.getElementById("status-line");
+    const selectedUnitId = document.getElementById("selected-unit-id");
+    const selectedUnitNode = document.getElementById("selected-unit-node");
+    const selectedUnitRole = document.getElementById("selected-unit-role");
+    const selectedUnitResult = document.getElementById("selected-unit-result");
+    const selectedUnitDuration = document.getElementById("selected-unit-duration");
+    let currentSettlementRecord = null;
+
+    const settlementMap = {
+      "task-8948": {
+        badge: { text: "Disputed", className: "badge rose" },
+        topStatus: { text: "5 settlement records", className: "badge" },
+        records: [
+          {
+            id: "settlement-8948-failure",
+            label: "Node 003 failure settlement",
+            unit: "unit-01a",
+            node: "Node 003 - Exxact",
+            tx: "0x9f31ab44e2dd1100aa3344bbccde",
+            state: "Disputed automatically after execution failure",
+            badgeText: "Disputed",
+            badgeClass: "badge rose",
+            releasable: false
+          },
+          {
+            id: "settlement-8948-recovery",
+            label: "Node 001 recovery settlement",
+            unit: "unit-01b",
+            node: "Node 001 - Lektra",
+            tx: "0x81f2b4d2f4119c8e0f6b1af3d3c1",
+            state: "Successful settlement for recovered execution",
+            badgeText: "Successful",
+            badgeClass: "badge green",
+            releasable: true
+          },
+          {
+            id: "settlement-8948-node007a",
+            label: "Node 007 image settlement A",
+            unit: "unit-02",
+            node: "Node 007 - EG4",
+            tx: "0x007a19d24be0e44d61077aa10021",
+            state: "Successful image generation settlement",
+            badgeText: "Successful",
+            badgeClass: "badge green",
+            releasable: true
+          },
+          {
+            id: "settlement-8948-node006",
+            label: "Node 006 image settlement",
+            unit: "unit-03",
+            node: "Node 006 - EG4",
+            tx: "0x006b77a24be0e44d61066aa10021",
+            state: "Successful image generation settlement",
+            badgeText: "Successful",
+            badgeClass: "badge green",
+            releasable: true
+          },
+          {
+            id: "settlement-8948-node007b",
+            label: "Node 007 image settlement B",
+            unit: "unit-04",
+            node: "Node 007 - EG4",
+            tx: "0x007b19d24be0e44d61077bb10021",
+            state: "Successful image generation settlement",
+            badgeText: "Successful",
+            badgeClass: "badge green",
+            releasable: true
+          }
+        ],
+        billingText: "4 successful, 1 failed",
+        billingClass: "badge"
+      },
+      "task-8947": {
+        badge: { text: "Challenge window", className: "badge" },
+        topStatus: { text: "Challenge window", className: "badge" },
+        records: [
+          {
+            id: "settlement-8947-main",
+            label: "Primary settlement",
+            unit: "unit-02",
+            node: "Node 004",
+            tx: "0x4c91fa19a2208d54cc7ab33f2201",
+            state: "Window closes in 2m 05s",
+            badgeText: "Challenge window",
+            badgeClass: "badge",
+            releasable: true
+          }
+        ],
+        billingText: "Challenge window",
+        billingClass: "badge"
+      },
+      "task-8941": {
+        badge: { text: "Refunded", className: "badge rose" },
+        topStatus: { text: "Refunded", className: "badge rose" },
+        records: [
+          {
+            id: "settlement-8941-main",
+            label: "Refund settlement",
+            unit: "unit-01",
+            node: "Node 005",
+            tx: "0x91aa1f0c8baf5502ff00ca11aa9d",
+            state: "Refund completed",
+            badgeText: "Refunded",
+            badgeClass: "badge rose",
+            releasable: false
+          }
+        ],
+        billingText: "Refunded",
+        billingClass: "badge rose"
+      }
+    };
+
+    function setSelected(elements, key, value) {
+      document.querySelectorAll(elements).forEach((element) => {
+        element.classList.toggle("is-selected", element.dataset[key] === value);
+      });
+    }
+
+    function openAccordion(contentId) {
+      const content = document.getElementById(contentId);
+      const item = content.closest(".accordion-item");
+      item.classList.add("is-open");
+    }
+
+    function toggleAccordion(button) {
+      const content = document.getElementById(button.dataset.accordionTarget);
+      const item = content.closest(".accordion-item");
+      item.classList.toggle("is-open");
+    }
+
+    function syncTaskStatus(task) {
+      const config = settlementMap[task];
+      if (!config) {
+        return;
+      }
+
+      if (task === "task-8948") {
+        const hasDispute = config.records.some((entry) => entry.badgeText === "Disputed");
+        const successfulCount = config.records.filter((entry) => entry.badgeText === "Successful" || entry.badgeText === "Released").length;
+        config.topStatus = { text: "5 settlement records", className: "badge" };
+        config.badge = { text: "5 records", className: "badge" };
+        config.billingText = successfulCount + " successful, " + (hasDispute ? "1 failed" : "0 failed");
+        config.billingClass = "badge";
+      } else {
+        const record = config.records[0];
+        config.topStatus = { text: record.badgeText, className: record.badgeClass };
+        config.badge = { text: record.badgeText, className: record.badgeClass };
+        config.billingText = record.badgeText;
+        config.billingClass = record.badgeClass;
+      }
+
+      document.querySelectorAll("[data-billing-status='" + task + "']").forEach((status) => {
+        status.textContent = config.billingText;
+        status.className = config.billingClass;
+      });
+    }
+
+    function renderSettlementRecord(task, recordId) {
+      const config = settlementMap[task];
+      const record = config.records.find((entry) => entry.id === recordId) || config.records[0];
+      currentSettlementRecord = { task, recordId: record.id };
+
+      syncTaskStatus(task);
+      settlementRecordLabel.textContent = record.label;
+      settlementUnit.textContent = record.unit;
+      settlementNodes.textContent = record.node;
+      settlementTx.textContent = record.tx;
+      settlementWindow.textContent = record.state;
+      settlementBadge.textContent = record.badgeText;
+      settlementBadge.className = record.badgeClass;
+      globalSettlementBadge.textContent = config.topStatus.text;
+      globalSettlementBadge.className = config.topStatus.className;
+      document.getElementById("release-btn").disabled = !record.releasable;
+      document.getElementById("release-btn").textContent = record.releasable ? "Release selected" : "Release blocked";
+    }
+
+    function fillSettlement(data) {
+      const task = data.task || "task-8948";
+      const unit = data.unit || "unit-01";
+      const node = data.node || "Node 001 - Lektra";
+      const variant = data.variant || "Variant A";
+      const config = settlementMap[task];
+      const matchingRow = document.querySelector(".bar-row[data-unit-select='" + unit + "']");
+
+      settlementPanel.classList.remove("is-hidden");
+      executionLayout.classList.add("has-settlement");
+      settlementVariant.textContent = variant;
+      settlementTask.textContent = task;
+      statusLine.textContent = "Settlement opened for " + task + " via " + node + ".";
+
+      if (matchingRow) {
+        selectUnit(matchingRow.dataset);
+      }
+
+      setSelected(".image-card", "variantSelect", variant);
+      setSelected(".billing-row", "billingTask", task);
+      renderSettlementRecord(task, data.recordId || config.records[0].id);
+    }
+
+    function selectUnit(data) {
+      selectedUnitId.textContent = data.unitSelect;
+      selectedUnitNode.textContent = data.node;
+      selectedUnitRole.textContent = data.role;
+      selectedUnitResult.textContent = data.result;
+      selectedUnitDuration.textContent = data.duration;
+
+      setSelected(".bar-row", "unitSelect", data.unitSelect);
+    }
+
+    document.querySelectorAll("[data-accordion-target]").forEach((button) => {
+      button.addEventListener("click", () => toggleAccordion(button));
+    });
+
+    document.querySelectorAll("[data-accordion-open]").forEach((button) => {
+      button.addEventListener("click", () => openAccordion(button.dataset.accordionOpen));
+    });
+
+    document.querySelectorAll(".image-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        setSelected(".image-card", "variantSelect", card.dataset.variantSelect);
+        fillSettlement({
+          task: card.dataset.task,
+          unit: card.dataset.unit,
+          node: card.dataset.node,
+          variant: card.dataset.variantSelect
+        });
+      });
+    });
+
+    document.querySelectorAll(".bar-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        selectUnit(row.dataset);
+      });
+    });
+
+    document.querySelectorAll(".billing-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        fillSettlement({
+          task: row.dataset.billingTask,
+          unit: row.dataset.billingTask === "task-8948" ? "unit-01" : row.dataset.billingTask === "task-8947" ? "unit-02" : "unit-01",
+          node: row.dataset.billingTask === "task-8948" ? "Node 001 - Lektra" : row.dataset.billingTask === "task-8947" ? "Node 004" : "Node 005",
+          variant: "Billing trace"
+        });
+        openAccordion("billing-content");
+      });
+    });
+
+    document.querySelectorAll(".segment-btn").forEach((segment) => {
+      segment.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const row = segment.closest(".bar-row");
+        if (row) {
+          selectUnit(row.dataset);
+        }
+        fillSettlement({
+          task: segment.dataset.task,
+          recordId: segment.dataset.recordId,
+          unit: row ? row.dataset.unitSelect : undefined,
+          node: row ? row.dataset.node : undefined,
+          variant: "Timeline settlement"
+        });
+      });
+    });
+
+    document.getElementById("close-settlement-btn").addEventListener("click", () => {
+      settlementPanel.classList.add("is-hidden");
+      executionLayout.classList.remove("has-settlement");
+      statusLine.textContent = "Settlement panel closed.";
+    });
+
+    document.getElementById("copy-btn").addEventListener("click", async () => {
+      const payload = [
+        "task=" + settlementTask.textContent,
+        "unit=" + settlementUnit.textContent,
+        "tx=" + settlementTx.textContent,
+        "window=" + settlementWindow.textContent
+      ].join("\n");
+
+      try {
+        await navigator.clipboard.writeText(payload);
+        statusLine.textContent = "Proof copied to clipboard.";
+      } catch (error) {
+        statusLine.textContent = "Clipboard copy is blocked in this browser preview.";
+      }
+    });
+
+    document.getElementById("release-btn").addEventListener("click", () => {
+      if (!currentSettlementRecord) {
+        statusLine.textContent = "No settlement record selected.";
+        return;
+      }
+
+      const taskConfig = settlementMap[currentSettlementRecord.task];
+      const record = taskConfig.records.find((entry) => entry.id === currentSettlementRecord.recordId);
+      if (!record || !record.releasable) {
+        statusLine.textContent = "Release is blocked for the selected settlement record.";
+        return;
+      }
+
+      record.state = "Released on-chain";
+      record.badgeText = "Released";
+      record.badgeClass = "badge green";
+      renderSettlementRecord(currentSettlementRecord.task, currentSettlementRecord.recordId);
+      statusLine.textContent = "Payment release simulated for " + record.label + ".";
+    });
+
+    document.getElementById("dispute-btn").addEventListener("click", () => {
+      if (!currentSettlementRecord) {
+        statusLine.textContent = "No settlement record selected.";
+        return;
+      }
+
+      const taskConfig = settlementMap[currentSettlementRecord.task];
+      const record = taskConfig.records.find((entry) => entry.id === currentSettlementRecord.recordId);
+      if (!record) {
+        return;
+      }
+
+      record.state = "Escalated for manual review";
+      record.badgeText = "Disputed";
+      record.badgeClass = "badge rose";
+      record.releasable = false;
+      renderSettlementRecord(currentSettlementRecord.task, currentSettlementRecord.recordId);
+      statusLine.textContent = "Dispute opened for " + record.label + ".";
+    });
+  </script>
+</body>
+</html>

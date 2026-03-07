@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lektra Hackathon Video Screens</title>
+  <style>
+    :root {
+      --nav: #07162f;
+      --nav-soft: #34415a;
+      --workspace: #ececef;
+      --card: #ffffff;
+      --panel: #f6f6f8;
+      --line: #d4d6dc;
+      --ink: #15161b;
+      --muted: #727887;
+      --green: #63b57a;
+      --blue: #6fa0d8;
+      --teal: #8ec3c2;
+      --rose: #e6b7c1;
+      --salmon: #ef7f7d;
+      --shadow: 0 16px 36px rgba(15, 16, 24, 0.12);
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #d9d9dc;
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .page {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 24px 18px 64px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .intro {
+      display: grid;
+      gap: 10px;
+    }
+
+    .intro h1 {
+      font-size: 2.4rem;
+      letter-spacing: -0.04em;
+    }
+
+    .intro p {
+      color: #61697a;
+      max-width: 88ch;
+      line-height: 1.45;
+    }
+
+    .screen {
+      display: grid;
+      gap: 10px;
+    }
+
+    .screen-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 14px;
+      color: #4f586a;
+    }
+
+    .screen-label strong {
+      font-size: 1.1rem;
+    }
+
+    .shot {
+      min-height: 860px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid #cfd2d8;
+      box-shadow: var(--shadow);
+      background: var(--workspace);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 252px 1fr;
+      min-height: 860px;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #07162f 0%, #06122a 100%);
+      color: #ffffff;
+      padding: 20px 18px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      margin-bottom: 32px;
+      letter-spacing: -0.04em;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-item {
+      padding: 12px;
+      border-radius: 10px;
+      color: #eef2f7;
+      font-size: 15px;
+    }
+
+    .nav-item.active {
+      background: var(--nav-soft);
+    }
+
+    .nav-item.dim {
+      color: #d1d8e4;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .balance strong {
+      display: block;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .balance span,
+    .profile small {
+      color: #d1d8e4;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a9d37c, #59843d);
+    }
+
+    .workspace {
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      position: relative;
+    }
+
+    .composer {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(22, 22, 29, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr 116px;
+      gap: 12px;
+    }
+
+    .prompt-box {
+      min-height: 84px;
+      border-radius: 10px;
+      border: 1px solid #cfd2d8;
+      background: #f5f5f6;
+      padding: 12px 14px;
+      color: #2f3440;
+      line-height: 1.4;
+    }
+
+    .composer-side {
+      display: grid;
+      gap: 10px;
+    }
+
+    .chip,
+    .button,
+    .badge {
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid #d4d6dc;
+      background: #f7f7f8;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .button {
+      background: #15161b;
+      color: white;
+      border-color: #15161b;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eff3f8;
+      color: #41506a;
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .badge.green {
+      background: #e6f3ea;
+      color: #2f7a48;
+    }
+
+    .badge.blue {
+      background: #e7f0fb;
+      color: #3b6796;
+    }
+
+    .badge.rose {
+      background: #f7e8ee;
+      color: #8f5064;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(24, 24, 28, 0.05);
+    }
+
+    .card.tall {
+      grid-column: 1 / span 1;
+    }
+
+    .art {
+      height: 250px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(146, 183, 213, 0.26), rgba(112, 131, 155, 0.10)),
+        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .art::before,
+    .art::after {
+      content: "";
+      position: absolute;
+      border-radius: 50% 50% 12% 12%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(210,221,232,0.92));
+    }
+
+    .art::before {
+      width: 78%;
+      height: 62%;
+      left: -6%;
+      bottom: -8%;
+      transform: rotate(-8deg);
+    }
+
+    .art::after {
+      width: 58%;
+      height: 52%;
+      right: -4%;
+      bottom: -6%;
+      transform: rotate(8deg);
+    }
+
+    .art.alt::before {
+      width: 70%;
+      height: 46%;
+      left: 6%;
+      bottom: -2%;
+    }
+
+    .art.alt::after {
+      width: 40%;
+      height: 40%;
+      right: 10%;
+      bottom: 2%;
+    }
+
+    .art.split::before {
+      width: 100%;
+      height: 40%;
+      left: 0;
+      bottom: 48%;
+      border-radius: 0;
+      background: linear-gradient(180deg, rgba(103, 144, 183, 0.3), rgba(242, 245, 248, 0.8));
+    }
+
+    .art.split::after {
+      width: 100%;
+      height: 46%;
+      left: 0;
+      bottom: 0;
+      border-radius: 0;
+      background:
+        linear-gradient(180deg, rgba(146, 183, 213, 0.18), rgba(112, 131, 155, 0.06)),
+        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .timeline-block {
+      display: grid;
+      gap: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .timeline-block h3 {
+      font-size: 17px;
+    }
+
+    .axis {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .timeline-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .track-shell {
+      border: 3px solid #d2dceb;
+      border-radius: 16px;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .track {
+      height: 42px;
+      position: relative;
+    }
+
+    .segment {
+      position: absolute;
+      top: 7px;
+      height: 28px;
+      border-radius: 7px;
+    }
+
+    .detail-panel {
+      width: 360px;
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(18, 21, 31, 0.14);
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      background: #fbfcfd;
+      border: 1px dashed #c6ccd7;
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .record {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .billing-table {
+      display: grid;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+
+    .billing-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 220px 90px 180px;
+      gap: 12px;
+      padding: 14px 16px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .mono {
+      font-family: "SF Mono", "Menlo", monospace;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 1280px) {
+      .grid-4,
+      .billing-row {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-panel {
+        position: static;
+        width: auto;
+      }
+    }
+
+    @media (max-width: 880px) {
+      .app,
+      .composer {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro">
+      <h1>Lektra Hackathon Video Screens</h1>
+      <p>
+        These are capture-ready frames for the 2-minute demo video. They follow one story: prompt entered, images returned, failover made visible, split settlements explained, and billing tied back to what actually happened.
+      </p>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 1</strong>
+        <span>Prompt entry and generate action</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item active">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item dim">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <div class="composer">
+              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="composer-side">
+                <div class="chip">DreamShaper</div>
+                <div class="button">Generate</div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 2</strong>
+        <span>Four returned images in the Lektra grid</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item active">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item dim">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <div class="composer">
+              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="composer-side">
+                <div class="chip">DreamShaper</div>
+                <div class="button">Generate</div>
+              </div>
+            </div>
+
+            <div class="grid-4">
+              <div class="card">
+                <div class="art"></div>
+              </div>
+              <div class="card">
+                <div class="art alt"></div>
+              </div>
+              <div class="card">
+                <div class="art"></div>
+              </div>
+              <div class="card tall">
+                <div class="art split"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 3</strong>
+        <span>Execution timeline with failover highlighted</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item active">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item dim">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <div class="composer">
+              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="composer-side">
+                <div class="chip">DreamShaper</div>
+                <div class="button">Generate</div>
+              </div>
+            </div>
+
+            <div class="grid-4">
+              <div class="card"><div class="art"></div></div>
+              <div class="card"><div class="art alt"></div></div>
+              <div class="card"><div class="art"></div></div>
+              <div class="card tall"><div class="art split"></div></div>
+            </div>
+
+            <div class="timeline-block">
+              <h3>Execution Timeline</h3>
+              <div class="subtle">Total execution units: 4</div>
+              <div class="subtle">Total duration: 10.66 seconds</div>
+              <div class="axis">
+                <span>09:04:01</span>
+                <span>09:04:03</span>
+                <span>09:04:04</span>
+                <span>09:04:06</span>
+                <span>09:04:08</span>
+                <span>09:04:10</span>
+                <span>09:04:12</span>
+              </div>
+
+              <div class="timeline-row">
+                <div class="track-shell">
+                  <div class="subtle" style="text-align:center; margin-bottom:8px;">10.66 S Node 003 - Exxact -> Node 001 - Lektra</div>
+                  <div class="track">
+                    <div class="segment" style="left: 1%; width: 70%; background: var(--salmon);"></div>
+                    <div class="segment" style="left: 73%; width: 18%; background: #a5d7a7;"></div>
+                    <div class="segment" style="left: 76%; width: 14%; background: #7db2c4;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-row">
+                <div class="subtle">3.40 S Node 007 - EG4</div>
+                <div class="track">
+                  <div class="segment" style="left: 2%; width: 30%; background: var(--teal);"></div>
+                  <div class="segment" style="left: 12%; width: 12%; background: var(--blue);"></div>
+                </div>
+              </div>
+
+              <div class="timeline-row">
+                <div class="subtle">3.26 S Node 006 - EG4</div>
+                <div class="track">
+                  <div class="segment" style="left: 2%; width: 29%; background: #a8c5f0;"></div>
+                  <div class="segment" style="left: 11%; width: 12%; background: #7ea5ec;"></div>
+                </div>
+              </div>
+
+              <div class="timeline-row">
+                <div class="subtle">7.97 S Node 007 - EG4</div>
+                <div class="track">
+                  <div class="segment" style="left: 3%; width: 68%; background: var(--rose);"></div>
+                  <div class="segment" style="left: 25%; width: 10%; background: #a5acef;"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 4</strong>
+        <span>Settlement panel showing two separate records for the failover row</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item active">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item dim">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <div class="composer">
+              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="composer-side">
+                <div class="chip">DreamShaper</div>
+                <div class="button">Generate</div>
+              </div>
+            </div>
+
+            <div class="grid-4">
+              <div class="card"><div class="art"></div></div>
+              <div class="card"><div class="art alt"></div></div>
+              <div class="card"><div class="art"></div></div>
+              <div class="card tall"><div class="art split"></div></div>
+            </div>
+
+            <div class="timeline-block">
+              <h3>Execution Timeline</h3>
+              <div class="subtle">Selected row: 10.66 S Node 003 - Exxact -> Node 001 - Lektra</div>
+            </div>
+
+            <aside class="detail-panel">
+              <div class="row">
+                <h3>Settlement proof</h3>
+                <span class="badge">2 records</span>
+              </div>
+              <div class="field">
+                <div class="subtle">Task</div>
+                <div class="mono">task-8948</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Split settlement logic</div>
+                <div class="subtle">The failed execution and the recovered execution are not treated as the same settlement.</div>
+              </div>
+              <div class="record">
+                <div class="row">
+                  <strong>Node 003 failure settlement</strong>
+                  <span class="badge rose">Disputed</span>
+                </div>
+                <div class="subtle">Executor: Node 003 - Exxact</div>
+                <div class="mono">tx: 0x9f31ab44e2dd1100aa3344bbccde</div>
+              </div>
+              <div class="record">
+                <div class="row">
+                  <strong>Node 001 recovery settlement</strong>
+                  <span class="badge green">Successful</span>
+                </div>
+                <div class="subtle">Executor: Node 001 - Lektra</div>
+                <div class="mono">tx: 0x81f2b4d2f4119c8e0f6b1af3d3c1</div>
+              </div>
+            </aside>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 5</strong>
+        <span>Focus on the disputed failed execution settlement</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item active">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item dim">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <aside class="detail-panel" style="position:static; width:420px;">
+              <div class="row">
+                <h3>Settlement proof</h3>
+                <span class="badge rose">Disputed</span>
+              </div>
+              <div class="field">
+                <div class="subtle">Settlement record</div>
+                <strong>Node 003 failure settlement</strong>
+              </div>
+              <div class="field">
+                <div class="subtle">Reason</div>
+                <div>Execution failed on Node 003 - Exxact before successful completion.</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Settlement state</div>
+                <div>Disputed automatically after execution failure.</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Action</div>
+                <div>Release is blocked.</div>
+              </div>
+            </aside>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 6</strong>
+        <span>Focus on the successful recovery settlement</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item active">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item dim">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <aside class="detail-panel" style="position:static; width:420px;">
+              <div class="row">
+                <h3>Settlement proof</h3>
+                <span class="badge green">Successful</span>
+              </div>
+              <div class="field">
+                <div class="subtle">Settlement record</div>
+                <strong>Node 001 recovery settlement</strong>
+              </div>
+              <div class="field">
+                <div class="subtle">Reason</div>
+                <div>Node 001 - Lektra completed the recovered execution and returned the final image.</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Settlement state</div>
+                <div>Successful settlement for recovered execution.</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Action</div>
+                <div>Eligible for payment release.</div>
+              </div>
+            </aside>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="screen-label">
+        <strong>Screen 7</strong>
+        <span>Billing trace summarizing the split state</span>
+      </div>
+      <div class="shot">
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">Lektra</div>
+            <nav class="nav">
+              <div class="nav-item dim">Generate</div>
+              <div class="nav-item dim">Tasks</div>
+              <div class="nav-item dim">Nodes</div>
+              <div class="nav-item dim">Keys</div>
+              <div class="nav-item active">Billing</div>
+            </nav>
+            <div class="sidebar-footer">
+              <div class="balance">
+                <strong>$40.80</strong>
+                <span>Balance</span>
+              </div>
+              <div class="profile">
+                <div class="avatar"></div>
+                <div>
+                  <strong>Vitaly</strong><br>
+                  <small>vitaly@yuxt.com</small>
+                </div>
+              </div>
+            </div>
+          </aside>
+          <section class="workspace">
+            <div class="billing-table">
+              <h3>Billing trace</h3>
+              <div class="billing-row">
+                <span class="mono">task-8948</span>
+                <span>Mountains made of plush with snow covering tops</span>
+                <span>001, 006, 007 with 003 failed</span>
+                <span>$0.20</span>
+                <span class="badge">1 disputed, 1 successful</span>
+              </div>
+              <div class="billing-row">
+                <span class="mono">task-8947</span>
+                <span>Storm clouds over a neon city</span>
+                <span>004, 007</span>
+                <span>$0.12</span>
+                <span class="badge">Challenge window</span>
+              </div>
+              <div class="billing-row">
+                <span class="mono">task-8941</span>
+                <span>Abstract moss terrain macro shot</span>
+                <span>005</span>
+                <span>$0.08</span>
+                <span class="badge rose">Refunded</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
