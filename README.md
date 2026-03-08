@@ -10,6 +10,18 @@ This repository contains the hackathon implementation of Lektra's on-chain settl
 - `migrations/`: SQL template for settlement fields.
 - `tests/`: unit tests.
 
+## Lektra Arbitrum Hackathon deployment
+- Contract: `InferenceEscrow`
+- Network: `Arbitrum Sepolia (421614)`
+- Contract address: `0x6f8C4F2df574239312D06810786f943131d5e6c8`
+- Explorer link: [sepolia.arbiscan.io/address/0x6f8C4F2df574239312D06810786f943131d5e6c8](https://sepolia.arbiscan.io/address/0x6f8C4F2df574239312D06810786f943131d5e6c8)
+- Example `submitResult` tx: [0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399](https://sepolia.arbiscan.io/tx/0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399)
+- Repository: [github.com/lektra-labs/lektra-arbitrum-compute](https://github.com/lektra-labs/lektra-arbitrum-compute)
+
+Demo roles used:
+- Provider: `0x58FBf65233eFbFFE36Aa3e83DCd7a8813fC65bB9`
+- Job requester: `0xFEF9E3e1571004F0C6f7d219108A48ef1171c021`
+
 ## Quick start
 Run tests:
 
@@ -25,7 +37,7 @@ python3 demo/run_sidecar_flow.py
 
 Default demo addresses:
 - Provider: `0x58FBf65233eFbFFE36Aa3e83DCd7a8813fC65bB9`
-- Job requester: `0x66c18AC12b1D4790939e84AA3476ADfCd8284180`
+- Job requester: `0xFEF9E3e1571004F0C6f7d219108A48ef1171c021`
 
 ## Real chain mode (step 1)
 The sidecar chain client now supports real transactions when `dry_run=False`.
