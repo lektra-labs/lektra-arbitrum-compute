@@ -260,6 +260,21 @@
       justify-content: center;
     }
 
+    .chip {
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .chip::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid #6b7280;
+      flex: 0 0 auto;
+    }
+
     .button {
       background: #15161b;
       color: white;
@@ -487,6 +502,18 @@
       line-height: 1.4;
     }
 
+    .tx-link {
+      width: fit-content;
+      color: #2d5db3;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .tx-link:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 1280px) {
       .grid-4,
       .billing-row {
@@ -560,7 +587,7 @@
             <div class="composer">
               <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
-                <div class="chip">DreamShaper</div>
+                <div class="chip">Flux2 Dev</div>
                 <div class="button">Generate</div>
               </div>
             </div>
@@ -603,7 +630,7 @@
             <div class="composer">
               <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
-                <div class="chip">DreamShaper</div>
+                <div class="chip">Flux2 Dev</div>
                 <div class="button">Generate</div>
               </div>
             </div>
@@ -661,7 +688,7 @@
             <div class="composer">
               <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
-                <div class="chip">DreamShaper</div>
+                <div class="chip">Flux2 Dev</div>
                 <div class="button">Generate</div>
               </div>
             </div>
@@ -762,7 +789,7 @@
             <div class="composer">
               <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
-                <div class="chip">DreamShaper</div>
+                <div class="chip">Flux2 Dev</div>
                 <div class="button">Generate</div>
               </div>
             </div>
@@ -776,7 +803,7 @@
 
             <div class="timeline-block">
               <h3>Execution Timeline</h3>
-              <div class="subtle">Selected row: 10.66 S Node 003 - Exxact -> Node 001 - Lektra</div>
+              <div class="subtle">Selected row: 10.66 S Node 003 (Exxact) -> Node 001 (Lektra)</div>
             </div>
 
             <aside class="detail-panel">
@@ -797,16 +824,17 @@
                   <strong>Node 003 failure settlement</strong>
                   <span class="badge rose">Disputed</span>
                 </div>
-                <div class="subtle">Executor: Node 003 - Exxact</div>
-                <div class="mono">tx: 0x9f31ab44e2dd1100aa3344bbccde</div>
+                <div class="subtle">Executor: Node 003 (Exxact)</div>
+                <div class="mono">Submit tx: not submitted</div>
               </div>
               <div class="record">
                 <div class="row">
                   <strong>Node 001 recovery settlement</strong>
                   <span class="badge green">Successful</span>
                 </div>
-                <div class="subtle">Executor: Node 001 - Lektra</div>
-                <div class="mono">tx: 0x81f2b4d2f4119c8e0f6b1af3d3c1</div>
+                <div class="subtle">Executor: Node 001 (Lektra)</div>
+                <div class="mono">Submit tx: 0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399</div>
+                <a class="tx-link" href="https://sepolia.arbiscan.io/tx/0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399" target="_blank" rel="noreferrer noopener">View on Arbitrum Sepolia scan</a>
               </div>
             </aside>
           </section>
@@ -856,7 +884,7 @@
               </div>
               <div class="field">
                 <div class="subtle">Reason</div>
-                <div>Execution failed on Node 003 - Exxact before successful completion.</div>
+                <div>Execution failed on Node 003 (Exxact) before successful completion.</div>
               </div>
               <div class="field">
                 <div class="subtle">Settlement state</div>
@@ -865,6 +893,10 @@
               <div class="field">
                 <div class="subtle">Action</div>
                 <div>Release is blocked.</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Submit tx hash</div>
+                <div class="mono">Not submitted</div>
               </div>
             </aside>
           </section>
@@ -914,7 +946,7 @@
               </div>
               <div class="field">
                 <div class="subtle">Reason</div>
-                <div>Node 001 - Lektra completed the recovered execution and returned the final image.</div>
+                <div>Node 001 (Lektra) completed the recovered execution and returned the final image.</div>
               </div>
               <div class="field">
                 <div class="subtle">Settlement state</div>
@@ -923,6 +955,11 @@
               <div class="field">
                 <div class="subtle">Action</div>
                 <div>Eligible for payment release.</div>
+              </div>
+              <div class="field">
+                <div class="subtle">Submit tx hash</div>
+                <div class="mono">0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399</div>
+                <a class="tx-link" href="https://sepolia.arbiscan.io/tx/0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399" target="_blank" rel="noreferrer noopener">View on Arbitrum Sepolia scan</a>
               </div>
             </aside>
           </section>

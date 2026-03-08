@@ -63,7 +63,7 @@ cp .env.example .env
 
 2. Fill required values in `.env`:
 - `BACKEND_API_URL`
-- `BACKEND_BEARER_TOKEN` (required if CPS auth is enabled)
+- `BACKEND_BEARER_TOKEN` (optional for demo mode; required for live CPS polling)
 - `ARBITRUM_RPC_URL`
 - `ESCROW_CONTRACT_ADDRESS`
 - `TX_SENDER_PRIVATE_KEY`
@@ -118,12 +118,19 @@ Default (uses `TASK_ID` and `EXECUTION_UNIT_ID` from `.env`):
 python3 demo/run_real_flow.py --auto-release
 ```
 
+If `BACKEND_BEARER_TOKEN` is not set, the script skips CPS polling and assumes the selected execution unit is already completed. This is intended for local demos.
+
 Or pass IDs directly:
 ```bash
 python3 demo/run_real_flow.py \
   --task-id <task_id> \
   --execution-unit-id <execution_unit_id> \
   --auto-release
+```
+
+Force demo mode even when a bearer token is present:
+```bash
+python3 demo/run_real_flow.py --skip-backend-poll --auto-release
 ```
 
 ## Troubleshooting
@@ -134,7 +141,7 @@ python3 -m pip install web3
 - `private_key account does not match requester_address`:
   Set `JOB_REQUESTER_ADDRESS` to the address derived from `TX_SENDER_PRIVATE_KEY`.
 - `backend API error 403 ... Not authenticated`:
-  Provide `BACKEND_BEARER_TOKEN` or use a local auth-bypass configuration for development.
+  Provide `BACKEND_BEARER_TOKEN`, use `--skip-backend-poll` for demo mode, or use a local auth-bypass configuration for development.
 - `execution reverted: bad msg.value`:
   Ensure you are using the latest deployed escrow contract address that matches current sidecar expectations.
 - If secrets were shared during testing:

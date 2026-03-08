@@ -88,11 +88,16 @@ def main() -> None:
         action="store_true",
         help="Reuse existing sidecar DB file (default resets DB before run)",
     )
+    parser.add_argument(
+        "--skip-backend-poll",
+        action="store_true",
+        help="Skip CPS polling and assume the execution unit is already completed",
+    )
     args = parser.parse_args()
 
     load_env_file(Path(args.env_file))
 
-    backend_api_url = env("BACKEND_API_URL", required=True)
+    backend_api_url = env("BACKEND_API_URL", default="")
     backend_bearer = env("BACKEND_BEARER_TOKEN", default="")
     escrow_contract = env("ESCROW_CONTRACT_ADDRESS", required=True)
     rpc_url = env("ARBITRUM_RPC_URL", required=True)
@@ -119,7 +124,17 @@ def main() -> None:
     if db_path.exists() and not args.reuse_db:
         db_path.unlink()
 
-    backend = BackendApiClient(base_url=backend_api_url, bearer_token=backend_bearer or None)
+    skip_backend_poll = args.skip_backend_poll or not backend_bearer
+    if not skip_backend_poll and not backend_api_url:
+        raise RuntimeError(
+            "BACKEND_API_URL is required unless backend polling is skipped"
+        )
+
+    backend = (
+        None
+        if skip_backend_poll
+        else BackendApiClient(base_url=backend_api_url, bearer_token=backend_bearer)
+    )
     repository = SettlementRepository(db_path.as_posix())
     chain = ArbitrumEscrowClient(
         contract_address=escrow_contract,
@@ -144,13 +159,21 @@ def main() -> None:
         input_spec_hash=input_spec_hash,
     )
 
-    completion = poll_until_completed(
-        backend,
-        task_id=task_id,
-        execution_unit_id=execution_unit_id,
-        poll_interval_seconds=poll_interval_seconds,
-        poll_timeout_seconds=poll_timeout_seconds,
-    )
+    if skip_backend_poll:
+        completion = {
+            "task_id": task_id,
+            "execution_unit_id": execution_unit_id,
+            "status": "COMPLETED",
+            "artifact_urls": [],
+        }
+    else:
+        completion = poll_until_completed(
+            backend,
+            task_id=task_id,
+            execution_unit_id=execution_unit_id,
+            poll_interval_seconds=poll_interval_seconds,
+            poll_timeout_seconds=poll_timeout_seconds,
+        )
 
     orchestrator.mark_backend_completed(task_id=task_id, execution_unit_id=execution_unit_id)
 
@@ -177,6 +200,7 @@ def main() -> None:
             {
                 "task_id": task_id,
                 "execution_unit_id": execution_unit_id,
+                "backend_mode": "skipped_demo" if skip_backend_poll else "polled",
                 "backend_status": completion["status"],
                 "artifact_urls": completion["artifact_urls"],
                 "escrow_job_id": record.escrow_job_id,

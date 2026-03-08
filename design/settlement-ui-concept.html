@@ -246,6 +246,21 @@
       justify-content: center;
     }
 
+    .chip {
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .chip::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid #6b7280;
+      flex: 0 0 auto;
+    }
+
     .button,
     .btn.primary {
       background: #15161b;
@@ -570,10 +585,15 @@
       padding: 14px;
     }
 
-    .settlement-focus {
+    .panel-body {
       display: grid;
       gap: 8px;
-      padding: 12px;
+    }
+
+    .settlement-focus {
+      display: grid;
+      gap: 6px;
+      padding: 10px;
       border-radius: 8px;
       border: 1px solid #d7dce5;
       background: #fbfcfd;
@@ -582,7 +602,7 @@
     .settlement-focus-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
     }
 
@@ -603,15 +623,37 @@
       background: #fbfcfd;
       border: 1px solid #d7dce5;
       border-radius: 8px;
-      padding: 10px 11px;
+      padding: 8px 10px;
       display: grid;
       gap: 4px;
+    }
+
+    .compact-pair {
+      display: grid;
+      gap: 1px;
     }
 
     .mono {
       font-family: "Geist Mono", "SF Mono", "Menlo", monospace;
       font-size: 12px;
       line-height: 1.4;
+      word-break: break-all;
+    }
+
+    .tx-link {
+      width: fit-content;
+      color: #2d5db3;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .tx-link:hover {
+      text-decoration: underline;
+    }
+
+    .tx-link.is-hidden {
+      display: none;
     }
 
     .status-line {
@@ -711,7 +753,7 @@
         <div class="composer">
           <div class="prompt-box">futuristic house made of wavy lines in clay</div>
           <div class="composer-side">
-            <div class="chip">DreamShaper</div>
+            <div class="chip">Flux2 Dev</div>
             <div class="button">Generate</div>
           </div>
         </div>
@@ -743,7 +785,7 @@
             </div>
 
             <div class="image-grid">
-              <button class="image-card is-selected" data-variant-select="Variant A" data-task="task-8948" data-unit="unit-01" data-node="Node 001 - Lektra" data-role="Failover completion after Node 003 failure" data-duration="10.66s" data-result="Primary output selected">
+              <button class="image-card is-selected" data-variant-select="Variant A" data-task="task-8948" data-unit="unit-01" data-node="Node 001 (Lektra)" data-role="Failover completion after Node 003 failure" data-duration="10.66s" data-result="Primary output selected">
                 <img class="art" src="assets/5a43c3f1-a1ed-4a66-99ff-77483f5cd745.png" alt="Variant A placeholder">
                 <div class="row">
                   <strong>Variant A</strong>
@@ -755,7 +797,7 @@
                 </div>
               </button>
 
-              <button class="image-card" data-variant-select="Variant B" data-task="task-8948" data-unit="unit-02" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="3.40s" data-result="Secondary output selected">
+              <button class="image-card" data-variant-select="Variant B" data-task="task-8948" data-unit="unit-02" data-node="Node 007 (EG4)" data-role="EG4 / image generation" data-duration="3.40s" data-result="Secondary output selected">
                 <img class="art" src="assets/80d4f17e-e8be-4ddc-be79-c562b2d87d8d.png" alt="Variant B placeholder">
                 <div class="row">
                   <strong>Variant B</strong>
@@ -767,7 +809,7 @@
                 </div>
               </button>
 
-              <button class="image-card" data-variant-select="Variant C" data-task="task-8948" data-unit="unit-03" data-node="Node 006 - EG4" data-role="EG4 / image generation" data-duration="3.26s" data-result="Third output selected">
+              <button class="image-card" data-variant-select="Variant C" data-task="task-8948" data-unit="unit-03" data-node="Node 006 (EG4)" data-role="EG4 / image generation" data-duration="3.26s" data-result="Third output selected">
                 <img class="art" src="assets/d2b156dc-a27a-49d0-8432-d20fee605ed3.png" alt="Variant C placeholder">
                 <div class="row">
                   <strong>Variant C</strong>
@@ -779,7 +821,7 @@
                 </div>
               </button>
 
-              <button class="image-card" data-variant-select="Variant D" data-task="task-8948" data-unit="unit-04" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="7.97s" data-result="Fourth output selected">
+              <button class="image-card" data-variant-select="Variant D" data-task="task-8948" data-unit="unit-04" data-node="Node 007 (EG4)" data-role="EG4 / image generation" data-duration="7.97s" data-result="Fourth output selected">
                 <img class="art" src="assets/d71b31c5-bb89-490a-89b5-2611e94b04d1.png" alt="Variant D placeholder">
                 <div class="row">
                   <strong>Variant D</strong>
@@ -816,8 +858,8 @@
                         <span>09:04:12</span>
                       </div>
                       <div class="timeline">
-                        <div class="bar-row is-selected" data-unit-select="unit-01" data-node="Node 001 - Lektra" data-role="Node 003 failed, task rerouted to Node 001" data-duration="10.66s" data-result="Node 003 (Exxact) failed and Node 001 (Lektra) completed the output">
-                          <div class="bar-label">10.66 S <span>Node 003 - Exxact -&gt; Node 001 - Lektra</span><span class="energy-label">2.694 Wh</span></div>
+                        <div class="bar-row is-selected" data-unit-select="unit-01" data-node="Node 001 (Lektra)" data-role="Node 003 failed, task rerouted to Node 001" data-duration="10.66s" data-result="Node 003 (Exxact) failed and Node 001 (Lektra) completed the output">
+                          <div class="bar-label">10.66 S <span>Node 003 (Exxact) -&gt; Node 001 (Lektra)</span><span class="energy-label">2.694 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-failure" style="left: 2%; width: 72%; background: var(--salmon);"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-recovery" style="left: 77%; width: 18%; background: #a5d7a7;"></button>
@@ -825,24 +867,24 @@
                           </div>
                         </div>
 
-                        <div class="bar-row" data-unit-select="unit-02" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="3.40s" data-result="Generated second image output">
-                          <div class="bar-label">3.40 S <span>Node 007 - EG4</span><span class="energy-label">3.337 Wh</span></div>
+                        <div class="bar-row" data-unit-select="unit-02" data-node="Node 007 (EG4)" data-role="EG4 / image generation" data-duration="3.40s" data-result="Generated second image output">
+                          <div class="bar-label">3.40 S <span>Node 007 (EG4)</span><span class="energy-label">3.337 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007a" style="left: 2%; width: 30%; background: var(--teal);"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007a" style="left: 12%; width: 12%; background: var(--blue);"></button>
                           </div>
                         </div>
 
-                        <div class="bar-row" data-unit-select="unit-03" data-node="Node 006 - EG4" data-role="EG4 / image generation" data-duration="3.26s" data-result="Generated third image output">
-                          <div class="bar-label">3.26 S <span>Node 006 - EG4</span><span class="energy-label">2.498 Wh</span></div>
+                        <div class="bar-row" data-unit-select="unit-03" data-node="Node 006 (EG4)" data-role="EG4 / image generation" data-duration="3.26s" data-result="Generated third image output">
+                          <div class="bar-label">3.26 S <span>Node 006 (EG4)</span><span class="energy-label">2.498 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node006" style="left: 2%; width: 29%; background: #a8c5f0;"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node006" style="left: 11.5%; width: 12%; background: #7ea5ec;"></button>
                           </div>
                         </div>
 
-                        <div class="bar-row" data-unit-select="unit-04" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="7.97s" data-result="Generated fourth image output">
-                          <div class="bar-label">7.97 S <span>Node 007 - EG4</span><span class="energy-label">3.558 Wh</span></div>
+                        <div class="bar-row" data-unit-select="unit-04" data-node="Node 007 (EG4)" data-role="EG4 / image generation" data-duration="7.97s" data-result="Generated fourth image output">
+                          <div class="bar-label">7.97 S <span>Node 007 (EG4)</span><span class="energy-label">3.558 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007b" style="left: 3%; width: 68%; background: var(--rose);"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007b" style="left: 25%; width: 10%; background: #a5acef;"></button>
@@ -866,7 +908,7 @@
                           <div class="settlement-focus-top">
                             <strong id="selected-unit-id">unit-01</strong>
                             <div class="settlement-focus-meta">
-                              <span class="badge blue" id="selected-unit-node">Node 001 - Lektra</span>
+                              <span class="badge blue" id="selected-unit-node">Node 001 (Lektra)</span>
                               <strong id="selected-unit-duration">10.66s</strong>
                             </div>
                           </div>
@@ -876,32 +918,41 @@
 
                         <div class="compact-grid">
                           <div class="compact-field">
-                            <div class="subtle">Selected output</div>
-                            <strong id="settlement-variant">Variant A</strong>
+                            <div class="compact-pair">
+                              <div class="subtle">Selected output</div>
+                              <strong id="settlement-variant">Variant A</strong>
+                            </div>
                           </div>
                           <div class="compact-field">
-                            <div class="subtle">Task</div>
-                            <div class="mono" id="settlement-task">task-8948</div>
+                            <div class="compact-pair">
+                              <div class="subtle">Settlement record</div>
+                              <div id="settlement-record-label">Node 003 failure settlement</div>
+                            </div>
                           </div>
                           <div class="compact-field">
-                            <div class="subtle">Settlement record</div>
-                            <div id="settlement-record-label">Node 003 failure settlement</div>
+                            <div class="compact-pair">
+                              <div class="subtle">Task</div>
+                              <div class="mono" id="settlement-task">task-8948</div>
+                            </div>
+                            <div class="compact-pair">
+                              <div class="subtle">Execution unit</div>
+                              <div class="mono" id="settlement-unit">unit-01a</div>
+                            </div>
+                            <div class="compact-pair">
+                              <div class="subtle">Settlement executor</div>
+                              <div class="mono" id="settlement-nodes">Node 003 (Exxact)</div>
+                            </div>
                           </div>
                           <div class="compact-field">
-                            <div class="subtle">Execution unit</div>
-                            <div class="mono" id="settlement-unit">unit-01a</div>
-                          </div>
-                          <div class="compact-field">
-                            <div class="subtle">Settlement executor</div>
-                            <div class="mono" id="settlement-nodes">Node 003 - Exxact</div>
-                          </div>
-                          <div class="compact-field">
-                            <div class="subtle">Settlement state</div>
-                            <div id="settlement-window">Disputed automatically after execution failure</div>
+                            <div class="compact-pair">
+                              <div class="subtle">Settlement state</div>
+                              <div id="settlement-window">Disputed automatically after execution failure</div>
+                            </div>
                           </div>
                           <div class="compact-field" style="grid-column: 1 / -1;">
                             <div class="subtle">Submit tx hash</div>
-                            <div class="mono" id="settlement-tx">0x9f31ab44e2dd1100aa3344bbccde</div>
+                            <div class="mono" id="settlement-tx">Not submitted</div>
+                            <a class="tx-link is-hidden" id="settlement-tx-link" href="#" target="_blank" rel="noreferrer noopener">View on Arbitrum Sepolia scan</a>
                           </div>
                         </div>
                       </div>
@@ -968,6 +1019,7 @@
     const settlementUnit = document.getElementById("settlement-unit");
     const settlementNodes = document.getElementById("settlement-nodes");
     const settlementTx = document.getElementById("settlement-tx");
+    const settlementTxLink = document.getElementById("settlement-tx-link");
     const settlementWindow = document.getElementById("settlement-window");
     const settlementBadge = document.getElementById("settlement-badge");
     const globalSettlementBadge = document.getElementById("global-settlement-badge");
@@ -988,29 +1040,31 @@
             id: "settlement-8948-failure",
             label: "Node 003 failure settlement",
             unit: "unit-01a",
-            node: "Node 003 - Exxact",
-            tx: "0x9f31ab44e2dd1100aa3344bbccde",
+            node: "Node 003 (Exxact)",
+            tx: "Not submitted",
             state: "Disputed automatically after execution failure",
             badgeText: "Disputed",
             badgeClass: "badge rose",
-            releasable: false
+            releasable: false,
+            txUrl: ""
           },
           {
             id: "settlement-8948-recovery",
             label: "Node 001 recovery settlement",
             unit: "unit-01b",
-            node: "Node 001 - Lektra",
-            tx: "0x81f2b4d2f4119c8e0f6b1af3d3c1",
+            node: "Node 001 (Lektra)",
+            tx: "0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399",
             state: "Successful settlement for recovered execution",
             badgeText: "Successful",
             badgeClass: "badge green",
-            releasable: true
+            releasable: true,
+            txUrl: "https://sepolia.arbiscan.io/tx/0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399"
           },
           {
             id: "settlement-8948-node007a",
             label: "Node 007 image settlement A",
             unit: "unit-02",
-            node: "Node 007 - EG4",
+            node: "Node 007 (EG4)",
             tx: "0x007a19d24be0e44d61077aa10021",
             state: "Successful image generation settlement",
             badgeText: "Successful",
@@ -1021,7 +1075,7 @@
             id: "settlement-8948-node006",
             label: "Node 006 image settlement",
             unit: "unit-03",
-            node: "Node 006 - EG4",
+            node: "Node 006 (EG4)",
             tx: "0x006b77a24be0e44d61066aa10021",
             state: "Successful image generation settlement",
             badgeText: "Successful",
@@ -1032,7 +1086,7 @@
             id: "settlement-8948-node007b",
             label: "Node 007 image settlement B",
             unit: "unit-04",
-            node: "Node 007 - EG4",
+            node: "Node 007 (EG4)",
             tx: "0x007b19d24be0e44d61077bb10021",
             state: "Successful image generation settlement",
             badgeText: "Successful",
@@ -1138,6 +1192,13 @@
       settlementUnit.textContent = record.unit;
       settlementNodes.textContent = record.node;
       settlementTx.textContent = record.tx;
+      if (record.txUrl) {
+        settlementTxLink.href = record.txUrl;
+        settlementTxLink.classList.remove("is-hidden");
+      } else {
+        settlementTxLink.removeAttribute("href");
+        settlementTxLink.classList.add("is-hidden");
+      }
       settlementWindow.textContent = record.state;
       settlementBadge.textContent = record.badgeText;
       settlementBadge.className = record.badgeClass;
@@ -1150,7 +1211,7 @@
     function fillSettlement(data) {
       const task = data.task || "task-8948";
       const unit = data.unit || "unit-01";
-      const node = data.node || "Node 001 - Lektra";
+      const node = data.node || "Node 001 (Lektra)";
       const variant = data.variant || "Variant A";
       const config = settlementMap[task];
       const matchingRow = document.querySelector(".bar-row[data-unit-select='" + unit + "']");
@@ -1211,7 +1272,7 @@
         fillSettlement({
           task: row.dataset.billingTask,
           unit: row.dataset.billingTask === "task-8948" ? "unit-01" : row.dataset.billingTask === "task-8947" ? "unit-02" : "unit-01",
-          node: row.dataset.billingTask === "task-8948" ? "Node 001 - Lektra" : row.dataset.billingTask === "task-8947" ? "Node 004" : "Node 005",
+          node: row.dataset.billingTask === "task-8948" ? "Node 001 (Lektra)" : row.dataset.billingTask === "task-8947" ? "Node 004" : "Node 005",
           variant: "Billing trace"
         });
         openAccordion("billing-content");
@@ -1246,6 +1307,7 @@
         "task=" + settlementTask.textContent,
         "unit=" + settlementUnit.textContent,
         "tx=" + settlementTx.textContent,
+        "scan=" + (settlementTxLink.classList.contains("is-hidden") ? "n/a" : settlementTxLink.href),
         "window=" + settlementWindow.textContent
       ].join("\n");
 
