@@ -5,6 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lektra Hackathon Video Screens</title>
   <style>
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-SemiBold.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --nav: #07162f;
       --nav-soft: #34415a;
@@ -20,9 +52,9 @@
       --rose: #e6b7c1;
       --salmon: #ef7f7d;
       --shadow: 0 16px 36px rgba(15, 16, 24, 0.12);
-      --radius-xl: 22px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
+      --radius-xl: 16px;
+      --radius-lg: 12px;
+      --radius-md: 8px;
     }
 
     * {
@@ -33,7 +65,7 @@
       margin: 0;
       background: #d9d9dc;
       color: var(--ink);
-      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      font-family: "Gilroy", "Avenir Next", "Segoe UI", sans-serif;
     }
 
     h1,
@@ -54,6 +86,13 @@
     .intro {
       display: grid;
       gap: 10px;
+      justify-items: start;
+    }
+
+    .page-logo {
+      width: 156px;
+      height: auto;
+      display: block;
     }
 
     .intro h1 {
@@ -108,11 +147,10 @@
     }
 
     .logo {
-      width: 136px;
+      width: 81px;
       height: auto;
       margin-bottom: 32px;
       display: block;
-      filter: brightness(0) invert(1);
     }
 
     .nav {
@@ -179,16 +217,17 @@
       background: rgba(255, 255, 255, 0.76);
       border: 1px solid var(--line);
       box-shadow: 0 10px 24px rgba(22, 22, 29, 0.08);
-      border-radius: 18px;
+      border-radius: 12px;
       padding: 14px;
       display: grid;
-      grid-template-columns: 1fr 116px;
-      gap: 12px;
+      grid-template-columns: minmax(0, 1fr) 132px;
+      gap: 10px;
+      align-items: stretch;
     }
 
     .prompt-box {
       min-height: 84px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid #cfd2d8;
       background: #f5f5f6;
       padding: 12px 14px;
@@ -199,17 +238,26 @@
     .composer-side {
       display: grid;
       gap: 10px;
+      align-content: start;
     }
 
     .chip,
     .button,
     .badge {
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 12px 14px;
       border: 1px solid #d4d6dc;
       background: #f7f7f8;
       font-weight: 600;
       text-align: center;
+    }
+
+    .chip,
+    .button {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .button {
@@ -257,7 +305,7 @@
     .card {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 10px;
       padding: 12px;
       display: grid;
       gap: 10px;
@@ -270,70 +318,11 @@
 
     .art {
       height: 250px;
+      width: 100%;
       border-radius: 10px;
-      background:
-        linear-gradient(180deg, rgba(146, 183, 213, 0.26), rgba(112, 131, 155, 0.10)),
-        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
-      position: relative;
+      object-fit: cover;
+      display: block;
       overflow: hidden;
-    }
-
-    .art::before,
-    .art::after {
-      content: "";
-      position: absolute;
-      border-radius: 50% 50% 12% 12%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(210,221,232,0.92));
-    }
-
-    .art::before {
-      width: 78%;
-      height: 62%;
-      left: -6%;
-      bottom: -8%;
-      transform: rotate(-8deg);
-    }
-
-    .art::after {
-      width: 58%;
-      height: 52%;
-      right: -4%;
-      bottom: -6%;
-      transform: rotate(8deg);
-    }
-
-    .art.alt::before {
-      width: 70%;
-      height: 46%;
-      left: 6%;
-      bottom: -2%;
-    }
-
-    .art.alt::after {
-      width: 40%;
-      height: 40%;
-      right: 10%;
-      bottom: 2%;
-    }
-
-    .art.split::before {
-      width: 100%;
-      height: 40%;
-      left: 0;
-      bottom: 48%;
-      border-radius: 0;
-      background: linear-gradient(180deg, rgba(103, 144, 183, 0.3), rgba(242, 245, 248, 0.8));
-    }
-
-    .art.split::after {
-      width: 100%;
-      height: 46%;
-      left: 0;
-      bottom: 0;
-      border-radius: 0;
-      background:
-        linear-gradient(180deg, rgba(146, 183, 213, 0.18), rgba(112, 131, 155, 0.06)),
-        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
     }
 
     .row {
@@ -348,48 +337,96 @@
       font-size: 13px;
     }
 
+    .energy-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #e8f7ee;
+      color: #1f9d55;
+      margin-left: 10px;
+      line-height: 1.2;
+    }
+
     .timeline-block {
       display: grid;
-      gap: 14px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      padding: 18px;
+      gap: 10px;
+      background: transparent;
+      border: 0;
+      padding: 0;
     }
 
     .timeline-block h3 {
       font-size: 17px;
     }
 
+    .timeline-summary {
+      display: grid;
+      gap: 2px;
+    }
+
     .axis {
+      position: relative;
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       font-size: 12px;
       color: var(--muted);
+      height: 28px;
+      margin-bottom: 4px;
+    }
+
+    .axis::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 18px;
+      height: 1px;
+      background: #cfd4dd;
+    }
+
+    .axis span {
+      position: relative;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    .axis span:first-child {
+      transform: translateX(0);
+    }
+
+    .axis span::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      width: 1px;
+      height: 10px;
+      background: #cfd4dd;
+    }
+
+    .axis span:first-child::after {
+      left: 0;
     }
 
     .timeline-row {
       display: grid;
-      gap: 8px;
-    }
-
-    .track-shell {
-      border: 3px solid #d2dceb;
-      border-radius: 16px;
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.35);
+      gap: 4px;
     }
 
     .track {
-      height: 42px;
+      height: 30px;
       position: relative;
+      background: #eef1f5;
+      border-radius: 6px;
+      overflow: hidden;
     }
 
     .segment {
       position: absolute;
-      top: 7px;
-      height: 28px;
-      border-radius: 7px;
+      top: 0;
+      height: 30px;
+      border-radius: 4px;
     }
 
     .detail-panel {
@@ -399,7 +436,7 @@
       top: 24px;
       background: rgba(255, 255, 255, 0.96);
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 12px;
       box-shadow: 0 20px 40px rgba(18, 21, 31, 0.14);
       padding: 18px;
       display: grid;
@@ -445,7 +482,7 @@
     }
 
     .mono {
-      font-family: "SF Mono", "Menlo", monospace;
+      font-family: "Geist Mono", "SF Mono", "Menlo", monospace;
       font-size: 12px;
       line-height: 1.4;
     }
@@ -462,9 +499,18 @@
       }
     }
 
-    @media (max-width: 880px) {
-      .app,
+    @media (max-width: 960px) {
       .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .composer-side {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 880px) {
+      .app {
         grid-template-columns: 1fr;
       }
     }
@@ -473,6 +519,7 @@
 <body>
   <main class="page">
     <section class="intro">
+      <img class="page-logo" src="assets/lektra-logo-dark.svg" alt="Lektra">
       <h1>Lektra Hackathon Video Screens</h1>
       <p>
         These are capture-ready frames for the 2-minute demo video. They follow one story: prompt entered, images returned, failover made visible, split settlements explained, and billing tied back to what actually happened.
@@ -487,7 +534,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item active">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -511,7 +558,7 @@
           </aside>
           <section class="workspace">
             <div class="composer">
-              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
                 <div class="chip">DreamShaper</div>
                 <div class="button">Generate</div>
@@ -530,7 +577,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item active">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -554,7 +601,7 @@
           </aside>
           <section class="workspace">
             <div class="composer">
-              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
                 <div class="chip">DreamShaper</div>
                 <div class="button">Generate</div>
@@ -563,16 +610,16 @@
 
             <div class="grid-4">
               <div class="card">
-                <div class="art"></div>
+                <img class="art" src="assets/5a43c3f1-a1ed-4a66-99ff-77483f5cd745.png" alt="Placeholder house image 1">
               </div>
               <div class="card">
-                <div class="art alt"></div>
+                <img class="art" src="assets/80d4f17e-e8be-4ddc-be79-c562b2d87d8d.png" alt="Placeholder house image 2">
               </div>
               <div class="card">
-                <div class="art"></div>
+                <img class="art" src="assets/d2b156dc-a27a-49d0-8432-d20fee605ed3.png" alt="Placeholder house image 3">
               </div>
               <div class="card tall">
-                <div class="art split"></div>
+                <img class="art" src="assets/d71b31c5-bb89-490a-89b5-2611e94b04d1.png" alt="Placeholder house image 4">
               </div>
             </div>
           </section>
@@ -588,7 +635,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item active">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -612,7 +659,7 @@
           </aside>
           <section class="workspace">
             <div class="composer">
-              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
                 <div class="chip">DreamShaper</div>
                 <div class="button">Generate</div>
@@ -620,16 +667,19 @@
             </div>
 
             <div class="grid-4">
-              <div class="card"><div class="art"></div></div>
-              <div class="card"><div class="art alt"></div></div>
-              <div class="card"><div class="art"></div></div>
-              <div class="card tall"><div class="art split"></div></div>
+              <div class="card"><img class="art" src="assets/5a43c3f1-a1ed-4a66-99ff-77483f5cd745.png" alt="Placeholder house image 1"></div>
+              <div class="card"><img class="art" src="assets/80d4f17e-e8be-4ddc-be79-c562b2d87d8d.png" alt="Placeholder house image 2"></div>
+              <div class="card"><img class="art" src="assets/d2b156dc-a27a-49d0-8432-d20fee605ed3.png" alt="Placeholder house image 3"></div>
+              <div class="card tall"><img class="art" src="assets/d71b31c5-bb89-490a-89b5-2611e94b04d1.png" alt="Placeholder house image 4"></div>
             </div>
 
             <div class="timeline-block">
               <h3>Execution Timeline</h3>
-              <div class="subtle">Total execution units: 4</div>
-              <div class="subtle">Total duration: 10.66 seconds</div>
+              <div class="timeline-summary">
+                <div class="subtle">Total execution units: 4</div>
+                <div class="subtle">Total duration: 10.66 seconds</div>
+                <div class="subtle">Total energy consumption: 12.087 Wh for 4/4 units</div>
+              </div>
               <div class="axis">
                 <span>09:04:01</span>
                 <span>09:04:03</span>
@@ -641,18 +691,16 @@
               </div>
 
               <div class="timeline-row">
-                <div class="track-shell">
-                  <div class="subtle" style="text-align:center; margin-bottom:8px;">10.66 S Node 003 - Exxact -> Node 001 - Lektra</div>
-                  <div class="track">
-                    <div class="segment" style="left: 1%; width: 70%; background: var(--salmon);"></div>
-                    <div class="segment" style="left: 73%; width: 18%; background: #a5d7a7;"></div>
-                    <div class="segment" style="left: 76%; width: 14%; background: #7db2c4;"></div>
-                  </div>
+                <div class="subtle">10.66 S <span style="color: var(--muted);">Node 003 - Exxact -> Node 001 - Lektra</span><span class="energy-label">2.694 Wh</span></div>
+                <div class="track">
+                  <div class="segment" style="left: 1%; width: 70%; background: var(--salmon);"></div>
+                  <div class="segment" style="left: 73%; width: 18%; background: #a5d7a7;"></div>
+                  <div class="segment" style="left: 76%; width: 14%; background: #7db2c4;"></div>
                 </div>
               </div>
 
               <div class="timeline-row">
-                <div class="subtle">3.40 S Node 007 - EG4</div>
+                <div class="subtle">3.40 S <span style="color: var(--muted);">Node 007 - EG4</span><span class="energy-label">3.337 Wh</span></div>
                 <div class="track">
                   <div class="segment" style="left: 2%; width: 30%; background: var(--teal);"></div>
                   <div class="segment" style="left: 12%; width: 12%; background: var(--blue);"></div>
@@ -660,7 +708,7 @@
               </div>
 
               <div class="timeline-row">
-                <div class="subtle">3.26 S Node 006 - EG4</div>
+                <div class="subtle">3.26 S <span style="color: var(--muted);">Node 006 - EG4</span><span class="energy-label">2.498 Wh</span></div>
                 <div class="track">
                   <div class="segment" style="left: 2%; width: 29%; background: #a8c5f0;"></div>
                   <div class="segment" style="left: 11%; width: 12%; background: #7ea5ec;"></div>
@@ -668,7 +716,7 @@
               </div>
 
               <div class="timeline-row">
-                <div class="subtle">7.97 S Node 007 - EG4</div>
+                <div class="subtle">7.97 S <span style="color: var(--muted);">Node 007 - EG4</span><span class="energy-label">3.558 Wh</span></div>
                 <div class="track">
                   <div class="segment" style="left: 3%; width: 68%; background: var(--rose);"></div>
                   <div class="segment" style="left: 25%; width: 10%; background: #a5acef;"></div>
@@ -688,7 +736,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item active">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -712,7 +760,7 @@
           </aside>
           <section class="workspace">
             <div class="composer">
-              <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+              <div class="prompt-box">futuristic house made of wavy lines in clay</div>
               <div class="composer-side">
                 <div class="chip">DreamShaper</div>
                 <div class="button">Generate</div>
@@ -720,10 +768,10 @@
             </div>
 
             <div class="grid-4">
-              <div class="card"><div class="art"></div></div>
-              <div class="card"><div class="art alt"></div></div>
-              <div class="card"><div class="art"></div></div>
-              <div class="card tall"><div class="art split"></div></div>
+              <div class="card"><img class="art" src="assets/5a43c3f1-a1ed-4a66-99ff-77483f5cd745.png" alt="Placeholder house image 1"></div>
+              <div class="card"><img class="art" src="assets/80d4f17e-e8be-4ddc-be79-c562b2d87d8d.png" alt="Placeholder house image 2"></div>
+              <div class="card"><img class="art" src="assets/d2b156dc-a27a-49d0-8432-d20fee605ed3.png" alt="Placeholder house image 3"></div>
+              <div class="card tall"><img class="art" src="assets/d71b31c5-bb89-490a-89b5-2611e94b04d1.png" alt="Placeholder house image 4"></div>
             </div>
 
             <div class="timeline-block">
@@ -774,7 +822,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item active">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -832,7 +880,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item active">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -890,7 +938,7 @@
       <div class="shot">
         <div class="app">
           <aside class="sidebar">
-            <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+            <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
             <nav class="nav">
               <div class="nav-item dim">Generate</div>
               <div class="nav-item dim">Tasks</div>
@@ -917,7 +965,7 @@
               <h3>Billing trace</h3>
               <div class="billing-row">
                 <span class="mono">task-8948</span>
-                <span>Mountains made of plush with snow covering tops</span>
+                <span>futuristic house made of wavy lines in clay</span>
                 <span>001, 006, 007 with 003 failed</span>
                 <span>$0.20</span>
                 <span class="badge">1 disputed, 1 successful</span>

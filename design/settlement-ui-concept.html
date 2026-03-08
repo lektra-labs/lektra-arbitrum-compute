@@ -5,6 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lektra Console One-Screen Prototype</title>
   <style>
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-SemiBold.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Gilroy";
+      src: url("assets/fonts/Gilroy/Gilroy-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --nav: #07162f;
       --nav-soft: #34415a;
@@ -20,9 +52,9 @@
       --rose: #e6b7c1;
       --salmon: #ef7f7d;
       --shadow: 0 16px 36px rgba(15, 16, 24, 0.12);
-      --radius-xl: 22px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
+      --radius-xl: 16px;
+      --radius-lg: 12px;
+      --radius-md: 8px;
     }
 
     * {
@@ -33,7 +65,7 @@
       margin: 0;
       background: #d7d7db;
       color: var(--ink);
-      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      font-family: "Gilroy", "Avenir Next", "Segoe UI", sans-serif;
     }
 
     button {
@@ -52,32 +84,6 @@
       max-width: 1500px;
       margin: 0 auto;
       padding: 24px 18px 48px;
-    }
-
-    .intro {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #60697b;
-      font-weight: 700;
-    }
-
-    .intro h1 {
-      font-size: clamp(2rem, 3vw, 3rem);
-      line-height: 1;
-      letter-spacing: -0.04em;
-    }
-
-    .intro p {
-      max-width: 86ch;
-      color: #60697b;
-      line-height: 1.45;
     }
 
     .app-shell {
@@ -100,11 +106,10 @@
     }
 
     .logo {
-      width: 136px;
+      width: 81px;
       height: auto;
       margin-bottom: 32px;
       display: block;
-      filter: brightness(0) invert(1);
     }
 
     .nav {
@@ -165,24 +170,6 @@
       position: relative;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .topbar h2 {
-      font-size: 28px;
-      letter-spacing: -0.03em;
-    }
-
-    .topbar p {
-      color: var(--muted);
-      max-width: 72ch;
-      line-height: 1.45;
-    }
-
     .badge {
       display: inline-flex;
       align-items: center;
@@ -216,16 +203,17 @@
       background: rgba(255, 255, 255, 0.76);
       border: 1px solid var(--line);
       box-shadow: 0 10px 24px rgba(22, 22, 29, 0.08);
-      border-radius: 18px;
+      border-radius: 12px;
       padding: 14px;
       display: grid;
-      grid-template-columns: 1fr 116px;
-      gap: 12px;
+      grid-template-columns: minmax(0, 1fr) 132px;
+      gap: 10px;
+      align-items: stretch;
     }
 
     .prompt-box {
       min-height: 84px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid #cfd2d8;
       background: #f5f5f6;
       padding: 12px 14px;
@@ -236,17 +224,26 @@
     .composer-side {
       display: grid;
       gap: 10px;
+      align-content: start;
     }
 
     .chip,
     .button,
     .btn {
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 12px 14px;
       border: 1px solid #d4d6dc;
       background: #f7f7f8;
       font-weight: 600;
       text-align: center;
+    }
+
+    .chip,
+    .button {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .button,
@@ -367,70 +364,11 @@
 
     .art {
       height: 220px;
+      width: 100%;
       border-radius: 10px;
-      background:
-        linear-gradient(180deg, rgba(146, 183, 213, 0.26), rgba(112, 131, 155, 0.10)),
-        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
-      position: relative;
+      object-fit: cover;
+      display: block;
       overflow: hidden;
-    }
-
-    .art::before,
-    .art::after {
-      content: "";
-      position: absolute;
-      border-radius: 50% 50% 12% 12%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(210,221,232,0.92));
-    }
-
-    .art::before {
-      width: 78%;
-      height: 62%;
-      left: -6%;
-      bottom: -8%;
-      transform: rotate(-8deg);
-    }
-
-    .art::after {
-      width: 58%;
-      height: 52%;
-      right: -4%;
-      bottom: -6%;
-      transform: rotate(8deg);
-    }
-
-    .art.alt::before {
-      width: 70%;
-      height: 46%;
-      left: 6%;
-      bottom: -2%;
-    }
-
-    .art.alt::after {
-      width: 40%;
-      height: 40%;
-      right: 10%;
-      bottom: 2%;
-    }
-
-    .art.split::before {
-      width: 100%;
-      height: 40%;
-      left: 0;
-      bottom: 48%;
-      border-radius: 0;
-      background: linear-gradient(180deg, rgba(103, 144, 183, 0.3), rgba(242, 245, 248, 0.8));
-    }
-
-    .art.split::after {
-      width: 100%;
-      height: 46%;
-      left: 0;
-      bottom: 0;
-      border-radius: 0;
-      background:
-        linear-gradient(180deg, rgba(146, 183, 213, 0.18), rgba(112, 131, 155, 0.06)),
-        linear-gradient(145deg, #dce3ea, #9db7d2 30%, #f5f7f8 65%, #8aa3bf 100%);
     }
 
     .accordion-stack {
@@ -487,43 +425,112 @@
       grid-template-columns: minmax(0, 1fr) 360px;
     }
 
+    .timeline-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, max-content));
+      justify-content: space-between;
+      column-gap: 32px;
+      row-gap: 2px;
+      margin-bottom: 10px;
+    }
+
     .timeline {
       display: grid;
-      gap: 10px;
+      gap: 6px;
     }
 
     .axis {
+      position: relative;
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       font-size: 12px;
       color: var(--muted);
+      height: 28px;
+      margin-bottom: 10px;
+    }
+
+    .axis::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 18px;
+      height: 1px;
+      background: #cfd4dd;
+    }
+
+    .axis span {
+      position: relative;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+
+    .axis span:first-child {
+      transform: translateX(0);
+    }
+
+    .axis span::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      width: 1px;
+      height: 10px;
+      background: #cfd4dd;
+    }
+
+    .axis span:first-child::after {
+      left: 0;
     }
 
     .bar-row {
       display: grid;
-      gap: 8px;
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      background: #fafbfc;
+      gap: 4px;
+      padding: 0;
+      border: 0;
+      background: transparent;
       cursor: pointer;
+      box-shadow: none;
+    }
+
+    .bar-row.is-selected {
+      border: 0;
+      box-shadow: none;
     }
 
     .bar-label {
-      font-size: 13px;
-      color: #454b57;
+      font-size: 12px;
+      color: #111827;
+    }
+
+    .bar-label span {
+      color: var(--muted);
+    }
+
+    .energy-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #e8f7ee;
+      color: #1f9d55;
+      margin-left: 10px;
+      line-height: 1.2;
     }
 
     .track {
       height: 30px;
       position: relative;
+      background: #eef1f5;
+      border-radius: 6px;
+      overflow: hidden;
     }
 
     .segment {
       position: absolute;
       top: 0;
       height: 30px;
-      border-radius: 6px;
+      border-radius: 4px;
       opacity: 0.95;
     }
 
@@ -536,7 +543,7 @@
     .selection-panel {
       background: #fbfcfd;
       border: 1px dashed #c6ccd7;
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 14px;
       display: grid;
       gap: 8px;
@@ -546,7 +553,7 @@
       margin-top: 12px;
       padding: 10px 12px;
       border: 1px dashed #c6ccd7;
-      border-radius: 12px;
+      border-radius: 8px;
       background: #fbfcfd;
       display: flex;
       justify-content: space-between;
@@ -567,7 +574,7 @@
       display: grid;
       gap: 8px;
       padding: 12px;
-      border-radius: 12px;
+      border-radius: 8px;
       border: 1px solid #d7dce5;
       background: #fbfcfd;
     }
@@ -595,14 +602,14 @@
     .compact-field {
       background: #fbfcfd;
       border: 1px solid #d7dce5;
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 10px 11px;
       display: grid;
       gap: 4px;
     }
 
     .mono {
-      font-family: "SF Mono", "Menlo", monospace;
+      font-family: "Geist Mono", "SF Mono", "Menlo", monospace;
       font-size: 12px;
       line-height: 1.4;
     }
@@ -645,11 +652,24 @@
         grid-template-columns: 1fr;
       }
 
+      .timeline-summary {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 960px) {
+      .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .composer-side {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 880px) {
-      .app-shell,
-      .composer {
+      .app-shell {
         grid-template-columns: 1fr;
       }
 
@@ -661,18 +681,9 @@
 </head>
 <body>
   <main class="page">
-    <section class="intro">
-      <span class="eyebrow">Lektra Console Extension</span>
-      <h1>One-screen UX for prompt, multi-node execution, and settlement proof.</h1>
-      <p>
-        This version keeps everything in one workspace. Instead of separate mock screens, the user stays on one task view and opens or closes the parts they need:
-        results, orchestration detail, failure handling, settlement proof, and billing explanation.
-      </p>
-    </section>
-
     <section class="app-shell">
       <aside class="sidebar">
-        <img class="logo" src="assets/lektra-wordmark.svg" alt="Lektra">
+        <img class="logo" src="assets/lektra-logo-white.svg" alt="Lektra">
         <nav class="nav">
           <div class="nav-item active">Generate</div>
           <div class="nav-item dim">Tasks</div>
@@ -697,18 +708,8 @@
       </aside>
 
       <section class="workspace">
-        <div class="topbar">
-          <div>
-            <h2>Generate with proof on demand</h2>
-            <p>
-              One task creates 4 returned images. The first execution starts on Node 003 (Exxact), fails over to Node 001 (Lektra), and the rest complete on Nodes 006 and 007 without leaving the main task view.
-            </p>
-          </div>
-          <span class="badge" id="global-settlement-badge">5 settlement records</span>
-        </div>
-
         <div class="composer">
-          <div class="prompt-box">Mountains made of plush with snow covering tops</div>
+          <div class="prompt-box">futuristic house made of wavy lines in clay</div>
           <div class="composer-side">
             <div class="chip">DreamShaper</div>
             <div class="button">Generate</div>
@@ -743,7 +744,7 @@
 
             <div class="image-grid">
               <button class="image-card is-selected" data-variant-select="Variant A" data-task="task-8948" data-unit="unit-01" data-node="Node 001 - Lektra" data-role="Failover completion after Node 003 failure" data-duration="10.66s" data-result="Primary output selected">
-                <div class="art"></div>
+                <img class="art" src="assets/5a43c3f1-a1ed-4a66-99ff-77483f5cd745.png" alt="Variant A placeholder">
                 <div class="row">
                   <strong>Variant A</strong>
                   <span class="badge blue">Node 001</span>
@@ -755,7 +756,7 @@
               </button>
 
               <button class="image-card" data-variant-select="Variant B" data-task="task-8948" data-unit="unit-02" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="3.40s" data-result="Secondary output selected">
-                <div class="art alt"></div>
+                <img class="art" src="assets/80d4f17e-e8be-4ddc-be79-c562b2d87d8d.png" alt="Variant B placeholder">
                 <div class="row">
                   <strong>Variant B</strong>
                   <span class="badge blue">Node 007</span>
@@ -767,7 +768,7 @@
               </button>
 
               <button class="image-card" data-variant-select="Variant C" data-task="task-8948" data-unit="unit-03" data-node="Node 006 - EG4" data-role="EG4 / image generation" data-duration="3.26s" data-result="Third output selected">
-                <div class="art"></div>
+                <img class="art" src="assets/d2b156dc-a27a-49d0-8432-d20fee605ed3.png" alt="Variant C placeholder">
                 <div class="row">
                   <strong>Variant C</strong>
                   <span class="badge blue">Node 006</span>
@@ -779,7 +780,7 @@
               </button>
 
               <button class="image-card" data-variant-select="Variant D" data-task="task-8948" data-unit="unit-04" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="7.97s" data-result="Fourth output selected">
-                <div class="art split"></div>
+                <img class="art" src="assets/d71b31c5-bb89-490a-89b5-2611e94b04d1.png" alt="Variant D placeholder">
                 <div class="row">
                   <strong>Variant D</strong>
                   <span class="badge blue">Node 007</span>
@@ -795,12 +796,16 @@
               <div class="accordion-item is-open" id="execution-accordion">
                 <button class="accordion-toggle" data-accordion-target="execution-content">
                   <span>Execution Timeline</span>
-                  <span class="subtle">Total execution units: 4</span>
                 </button>
                 <div class="accordion-content" id="execution-content">
                   <div class="execution-layout" id="execution-layout">
                     <div>
-                      <div class="subtle">Total duration: 10.66 seconds</div>
+                      <div class="timeline-summary">
+                        <div class="subtle">Total duration: 10.66 seconds</div>
+                        <div class="subtle">Total execution units: 4</div>
+                        <div class="subtle">Total energy consumption: 12.087 Wh for 4/4 units</div>
+                        <div class="subtle" id="global-settlement-badge">Total settlement records: 5</div>
+                      </div>
                       <div class="axis">
                         <span>09:04:01</span>
                         <span>09:04:03</span>
@@ -808,10 +813,11 @@
                         <span>09:04:06</span>
                         <span>09:04:08</span>
                         <span>09:04:10</span>
+                        <span>09:04:12</span>
                       </div>
                       <div class="timeline">
                         <div class="bar-row is-selected" data-unit-select="unit-01" data-node="Node 001 - Lektra" data-role="Node 003 failed, task rerouted to Node 001" data-duration="10.66s" data-result="Node 003 (Exxact) failed and Node 001 (Lektra) completed the output">
-                          <div class="bar-label">10.66 S Node 003 - Exxact -&gt; Node 001 - Lektra</div>
+                          <div class="bar-label">10.66 S <span>Node 003 - Exxact -&gt; Node 001 - Lektra</span><span class="energy-label">2.694 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-failure" style="left: 2%; width: 72%; background: var(--salmon);"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-recovery" style="left: 77%; width: 18%; background: #a5d7a7;"></button>
@@ -820,7 +826,7 @@
                         </div>
 
                         <div class="bar-row" data-unit-select="unit-02" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="3.40s" data-result="Generated second image output">
-                          <div class="bar-label">3.40 S Node 007 - EG4</div>
+                          <div class="bar-label">3.40 S <span>Node 007 - EG4</span><span class="energy-label">3.337 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007a" style="left: 2%; width: 30%; background: var(--teal);"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007a" style="left: 12%; width: 12%; background: var(--blue);"></button>
@@ -828,7 +834,7 @@
                         </div>
 
                         <div class="bar-row" data-unit-select="unit-03" data-node="Node 006 - EG4" data-role="EG4 / image generation" data-duration="3.26s" data-result="Generated third image output">
-                          <div class="bar-label">3.26 S Node 006 - EG4</div>
+                          <div class="bar-label">3.26 S <span>Node 006 - EG4</span><span class="energy-label">2.498 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node006" style="left: 2%; width: 29%; background: #a8c5f0;"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node006" style="left: 11.5%; width: 12%; background: #7ea5ec;"></button>
@@ -836,7 +842,7 @@
                         </div>
 
                         <div class="bar-row" data-unit-select="unit-04" data-node="Node 007 - EG4" data-role="EG4 / image generation" data-duration="7.97s" data-result="Generated fourth image output">
-                          <div class="bar-label">7.97 S Node 007 - EG4</div>
+                          <div class="bar-label">7.97 S <span>Node 007 - EG4</span><span class="energy-label">3.558 Wh</span></div>
                           <div class="track">
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007b" style="left: 3%; width: 68%; background: var(--rose);"></button>
                             <button class="segment segment-btn" data-task="task-8948" data-record-id="settlement-8948-node007b" style="left: 25%; width: 10%; background: #a5acef;"></button>
@@ -923,7 +929,7 @@
                   <div class="billing-table">
                     <button class="billing-row is-selected" data-billing-task="task-8948">
                       <span class="mono">task-8948</span>
-                      <span>Mountains made of plush with snow covering tops</span>
+                      <span>futuristic house made of wavy lines in clay</span>
                       <span>001, 006, 007 (003 failed)</span>
                       <span>$0.20</span>
                       <span class="badge" data-billing-status="task-8948">4 successful, 1 failed</span>
@@ -976,7 +982,7 @@
     const settlementMap = {
       "task-8948": {
         badge: { text: "Disputed", className: "badge rose" },
-        topStatus: { text: "5 settlement records", className: "badge" },
+        topStatus: { text: "Total settlement records: 5", className: "subtle" },
         records: [
           {
             id: "settlement-8948-failure",
@@ -1039,7 +1045,7 @@
       },
       "task-8947": {
         badge: { text: "Challenge window", className: "badge" },
-        topStatus: { text: "Challenge window", className: "badge" },
+        topStatus: { text: "Settlement state: Challenge window", className: "subtle" },
         records: [
           {
             id: "settlement-8947-main",
@@ -1058,7 +1064,7 @@
       },
       "task-8941": {
         badge: { text: "Refunded", className: "badge rose" },
-        topStatus: { text: "Refunded", className: "badge rose" },
+        topStatus: { text: "Settlement state: Refunded", className: "subtle" },
         records: [
           {
             id: "settlement-8941-main",
@@ -1104,13 +1110,13 @@
       if (task === "task-8948") {
         const hasDispute = config.records.some((entry) => entry.badgeText === "Disputed");
         const successfulCount = config.records.filter((entry) => entry.badgeText === "Successful" || entry.badgeText === "Released").length;
-        config.topStatus = { text: "5 settlement records", className: "badge" };
+        config.topStatus = { text: "Total settlement records: 5", className: "subtle" };
         config.badge = { text: "5 records", className: "badge" };
         config.billingText = successfulCount + " successful, " + (hasDispute ? "1 failed" : "0 failed");
         config.billingClass = "badge";
       } else {
         const record = config.records[0];
-        config.topStatus = { text: record.badgeText, className: record.badgeClass };
+        config.topStatus = { text: "Settlement state: " + record.badgeText, className: "subtle" };
         config.badge = { text: record.badgeText, className: record.badgeClass };
         config.billingText = record.badgeText;
         config.billingClass = record.badgeClass;
