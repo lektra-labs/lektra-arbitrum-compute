@@ -16,6 +16,7 @@ This repository contains the hackathon implementation of Lektra's on-chain settl
 - Contract address: `0x6f8C4F2df574239312D06810786f943131d5e6c8`
 - Explorer link: [sepolia.arbiscan.io/address/0x6f8C4F2df574239312D06810786f943131d5e6c8](https://sepolia.arbiscan.io/address/0x6f8C4F2df574239312D06810786f943131d5e6c8)
 - Example `submitResult` tx: [0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399](https://sepolia.arbiscan.io/tx/0x77a190ea99f4da7389d9df9832b5a2a8ce7221ac7bbe9c38b6505974c2d04399)
+- Live demo: [lektra-labs.github.io/lektra-arbitrum-compute](https://lektra-labs.github.io/lektra-arbitrum-compute/)
 - Repository: [github.com/lektra-labs/lektra-arbitrum-compute](https://github.com/lektra-labs/lektra-arbitrum-compute)
 
 Demo roles used:
